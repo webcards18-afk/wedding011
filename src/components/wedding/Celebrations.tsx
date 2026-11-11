@@ -58,7 +58,7 @@ export function Celebrations() {
                         key={e.id}
                         className="my-3 rounded-2xl border border-gold-soft/50 bg-cream-soft/65 p-4 shadow-[0_8px_30px_-15px_rgba(148,100,32,0.08)] backdrop-blur-sm transition-all duration-300 hover:border-gold/60 hover:bg-cream-soft/95 hover:shadow-[0_12px_35px_-12px_rgba(148,100,32,0.18)] md:p-6"
                       >
-                        <Reveal delay={i * 90} className="flex gap-4 md:gap-6">
+                        <Reveal delay={Math.min(i * 40, 120)} className="flex gap-4 md:gap-6">
                           <img
                             src={eventIcons[e.icon]}
                             alt=""

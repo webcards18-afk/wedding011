@@ -24,7 +24,7 @@ export function Reveal({ children, className, delay = 0, image = false }: Reveal
           io.disconnect();
         }
       },
-      { threshold: 0.12, rootMargin: "0px 0px -6% 0px" },
+      { threshold: 0.01, rootMargin: "150px 0px 50px 0px" },
     );
     io.observe(el);
     return () => io.disconnect();

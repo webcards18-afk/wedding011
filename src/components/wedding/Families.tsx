@@ -27,7 +27,7 @@ export function Families() {
         <h2 className="serif-title mt-3">{t.families.title}</h2>
       </Reveal>
 
-      <Reveal image delay={150} className="mx-auto mt-10 w-full max-w-[280px] md:max-w-[300px]">
+      <Reveal image delay={60} className="mx-auto mt-10 w-full max-w-[280px] md:max-w-[300px]">
         <div className="overflow-hidden rounded-2xl border border-gold-soft/50 bg-cream-soft/50 p-2 shadow-[0_12px_40px_-15px_rgba(148,100,32,0.15)]">
           <img
             src={media.familyIllustration.src}
@@ -41,7 +41,7 @@ export function Families() {
       </Reveal>
 
       <Reveal
-        delay={250}
+        delay={100}
         className="mx-auto mt-10 grid max-w-lg grid-cols-2 rounded-2xl border border-gold-soft/60 bg-cream-soft/70 p-6 shadow-[0_10px_35px_-15px_rgba(148,100,32,0.12)] backdrop-blur-sm"
       >
         {columns.map((c, i) => (
@@ -56,7 +56,7 @@ export function Families() {
         ))}
       </Reveal>
 
-      <Reveal delay={350}>
+      <Reveal delay={140}>
         <p className="mx-auto mt-10 max-w-xs font-display text-lg leading-relaxed text-foreground/85">
           {t.families.closing}
         </p>

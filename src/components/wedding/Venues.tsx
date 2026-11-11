@@ -24,7 +24,7 @@ export function Venues() {
             >
               <Reveal
                 image
-                delay={(i % 2) * 120}
+                delay={60}
                 className="aspect-[4/3] w-full overflow-hidden rounded-2xl border border-gold-soft/40 shadow-md"
               >
                 <img
@@ -33,10 +33,10 @@ export function Venues() {
                   width={1400}
                   height={966}
                   loading="lazy"
-                  className="h-full w-full object-cover transition-transform duration-[2200ms] ease-[var(--ease-elegant)] hover:scale-105"
+                  className="h-full w-full object-cover transition-transform duration-700 ease-out hover:scale-105"
                 />
               </Reveal>
-              <Reveal delay={(i % 2) * 120 + 120} className="mx-auto max-w-sm pt-8">
+              <Reveal delay={100} className="mx-auto max-w-sm pt-8">
                 <p className="eyebrow">{here.join(" · ")}</p>
                 <h3 className="serif-title mt-3">{copy.name}</h3>
                 {copy.sub && (

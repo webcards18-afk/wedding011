@@ -11,6 +11,8 @@ import {
 import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
+import archMobile from "@/assets/hero-arch-frame-mobile.webp";
+import couplePhoto from "@/assets/couple-portrait.webp";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
 function NotFoundComponent() {
@@ -92,6 +94,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [
+      {
+        rel: "preload",
+        as: "image",
+        href: archMobile,
+        type: "image/webp",
+      },
+      {
+        rel: "preload",
+        as: "image",
+        href: couplePhoto,
+        type: "image/webp",
+      },
       {
         rel: "stylesheet",
         href: appCss,
