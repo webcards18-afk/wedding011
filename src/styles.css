@@ -1,0 +1,373 @@
+/*
+ * Tailwind v4 entry: config lives here, with no tailwind.config.js or PostCSS plugin.
+ * Keep every @import in this top block. Remote fonts load via <link> in src/routes/__root.tsx.
+ */
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * Design system — "White & Gold editorial", matched to the sample invitation.
+ * Clean white paper, soft charcoal type, antique-gold eyebrows and hairlines, Cormorant serif headings.
+ */
+
+@theme inline {
+  --font-display: "Cormorant Garamond", "Tiro Devanagari Hindi", Georgia, serif;
+  --font-sans: "DM Sans", "Noto Sans Devanagari", system-ui, sans-serif;
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-ring-offset-background: var(--background);
+
+  --color-gold: var(--gold);
+  --color-gold-deep: var(--gold-deep);
+  --color-gold-soft: var(--gold-soft);
+  --color-ivory: var(--ivory);
+  --color-cream: var(--cream);
+  --color-ink: var(--ink);
+}
+
+:root {
+  --radius: 0.5rem;
+
+  /* Luxurious Royal Indian Palace Wedding Palette */
+  --ivory: oklch(0.985 0.015 88);
+  --cream: oklch(0.955 0.028 84);
+  --cream-soft: oklch(0.975 0.018 86);
+  --ink: oklch(0.25 0.012 60);
+  --gold: oklch(0.75 0.125 78);
+  --gold-deep: oklch(0.53 0.095 75);
+  --gold-soft: oklch(0.89 0.045 82);
+
+  --background: var(--ivory);
+  --foreground: var(--ink);
+  --card: var(--cream-soft);
+  --card-foreground: var(--ink);
+  --popover: var(--ivory);
+  --popover-foreground: var(--ink);
+  --primary: var(--gold-deep);
+  --primary-foreground: var(--ivory);
+  --secondary: var(--cream);
+  --secondary-foreground: var(--ink);
+  --muted: var(--cream);
+  --muted-foreground: oklch(0.48 0.018 60);
+  --accent: var(--gold-soft);
+  --accent-foreground: var(--ink);
+  --destructive: oklch(0.55 0.2 27);
+  --destructive-foreground: var(--ivory);
+  --border: oklch(0.88 0.035 84);
+  --input: oklch(0.88 0.035 84);
+  --ring: var(--gold);
+
+  --gradient-gold: linear-gradient(
+    135deg,
+    var(--gold-deep) 0%,
+    var(--gold) 28%,
+    oklch(0.92 0.07 85) 50%,
+    var(--gold) 72%,
+    var(--gold-deep) 100%
+  );
+  --veil-top: linear-gradient(
+    to bottom,
+    color-mix(in oklab, var(--ink) 62%, transparent) 0%,
+    color-mix(in oklab, var(--ink) 25%, transparent) 26%,
+    transparent 42%
+  );
+  --veil-bottom: linear-gradient(
+    to top,
+    color-mix(in oklab, var(--ink) 78%, transparent) 0%,
+    color-mix(in oklab, var(--ink) 40%, transparent) 30%,
+    transparent 52%
+  );
+  --on-photo: oklch(0.99 0.004 90);
+  --text-glow:
+    0 1px 2px color-mix(in oklab, var(--ink) 60%, transparent),
+    0 0 18px color-mix(in oklab, var(--ink) 45%, transparent);
+  --shadow-soft: 0 30px 60px -30px color-mix(in oklab, var(--ink) 35%, transparent);
+
+  --ease-elegant: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    background-color: var(--color-background);
+    background-image:
+      radial-gradient(ellipse 85% 55% at 50% -10%, rgba(245, 218, 168, 0.38), transparent 75%),
+      radial-gradient(ellipse 65% 45% at 90% 25%, rgba(248, 230, 212, 0.32), transparent 60%),
+      radial-gradient(ellipse 70% 50% at 10% 65%, rgba(245, 222, 175, 0.28), transparent 60%),
+      radial-gradient(ellipse 90% 50% at 50% 100%, rgba(245, 215, 160, 0.38), transparent 70%);
+    background-attachment: fixed;
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    font-weight: 300;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  ::selection {
+    background: var(--gold-soft);
+    color: var(--ink);
+  }
+}
+
+/* ——— Typography utilities ——— */
+@utility eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold-deep);
+  line-height: 1.8;
+}
+
+@utility serif-title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1.9rem, 4vw, 2.6rem);
+  line-height: 1.15;
+  letter-spacing: 0.005em;
+}
+
+@utility serif-xl {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2.6rem, 6vw, 3.6rem);
+  line-height: 1.05;
+}
+
+@utility detail {
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  line-height: 1.6;
+  color: var(--muted-foreground);
+}
+
+@utility on-photo {
+  color: var(--on-photo);
+  text-shadow: var(--text-glow);
+}
+
+@utility gold-text {
+  background: var(--gradient-gold);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer 9s linear infinite;
+}
+
+@utility hairline {
+  height: 1px;
+  background: var(--border);
+}
+
+@utility veil-top {
+  background: var(--veil-top);
+}
+
+@utility veil-bottom {
+  background: var(--veil-bottom);
+}
+
+@utility section-pad {
+  padding-block: clamp(5rem, 11vw, 9rem);
+  padding-inline: clamp(1.25rem, 5vw, 3rem);
+}
+
+@utility arch-mask {
+  border-radius: 999px 999px 0.25rem 0.25rem;
+}
+
+/* ——— Buttons ——— */
+@utility link-quiet {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  color: var(--ink);
+  border-bottom: 1px solid transparent;
+  padding-bottom: 2px;
+  transition:
+    border-color 0.4s var(--ease-elegant),
+    color 0.4s;
+  & svg {
+    transition: transform 0.4s var(--ease-elegant);
+  }
+  &:hover {
+    border-color: var(--gold);
+  }
+  &:hover svg {
+    transform: translate(2px, -2px);
+  }
+  &:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 3px;
+  }
+  &[aria-disabled="true"] {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+}
+
+/* ——— Motion ——— */
+@keyframes shimmer {
+  to {
+    background-position: 200% center;
+  }
+}
+@keyframes hero-reveal {
+  from {
+    transform: scale(1.12);
+    opacity: 0;
+    filter: blur(6px);
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes float-soft {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+@keyframes scroll-line {
+  0% {
+    transform: scaleY(0);
+    transform-origin: top;
+  }
+  50% {
+    transform: scaleY(1);
+    transform-origin: top;
+  }
+  51% {
+    transform: scaleY(1);
+    transform-origin: bottom;
+  }
+  100% {
+    transform: scaleY(0);
+    transform-origin: bottom;
+  }
+}
+@keyframes tick {
+  from {
+    opacity: 0.35;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@utility animate-hero-reveal {
+  animation: hero-reveal 2.4s var(--ease-elegant) both;
+}
+@utility animate-rise {
+  animation: rise-in 1.4s var(--ease-elegant) both;
+}
+@utility animate-float-soft {
+  animation: float-soft 6s ease-in-out infinite;
+}
+@utility animate-scroll-line {
+  animation: scroll-line 2.4s var(--ease-elegant) infinite;
+}
+@utility animate-tick {
+  animation: tick 0.6s var(--ease-elegant);
+}
+
+/* Scroll reveal — toggled by <Reveal> */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 1.2s var(--ease-elegant),
+    transform 1.2s var(--ease-elegant);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+.reveal-image {
+  overflow: hidden;
+}
+.reveal-image img {
+  transform: scale(1.12);
+  transition: transform 2.2s var(--ease-elegant);
+}
+.reveal-image.is-visible img {
+  transform: scale(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Devanagari: wide tracking breaks conjunct letters, so Hindi keeps natural spacing. */
+[data-lang="hi"] .eyebrow,
+[data-lang="hi"] [class*="tracking-"] {
+  letter-spacing: 0.02em !important;
+}
+[data-lang="hi"] .eyebrow {
+  font-size: 0.78rem;
+}
