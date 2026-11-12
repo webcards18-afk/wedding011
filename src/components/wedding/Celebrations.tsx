@@ -220,7 +220,7 @@ export function Celebrations() {
                         >
                           <div
                             className={cn(
-                              "flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border p-2 shadow-xs md:h-16 md:w-16",
+                              "flex h-24 w-24 shrink-0 items-center justify-center rounded-2xl border p-1 shadow-md transition-transform duration-300 hover:scale-105 sm:h-28 sm:w-28 md:h-32 md:w-32 md:p-1.5",
                               theme.iconBg,
                               theme.borderColor,
                             )}
@@ -228,10 +228,10 @@ export function Celebrations() {
                             <img
                               src={eventIcons[e.icon]}
                               alt=""
-                              width={192}
-                              height={192}
+                              width={256}
+                              height={256}
                               loading="lazy"
-                              className="h-full w-full object-contain"
+                              className="h-full w-full rounded-xl object-contain drop-shadow-md"
                             />
                           </div>
                           <div className="min-w-0 flex-1">
