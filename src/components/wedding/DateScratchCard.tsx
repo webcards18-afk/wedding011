@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { RotateCcw } from "lucide-react";
 import { useLanguage } from "@/i18n/LanguageContext";
 import { Countdown } from "./Countdown";
 import { Reveal } from "./Reveal";
@@ -11,11 +10,16 @@ export function DateScratchCard() {
   const [isRevealed, setIsRevealed] = useState(false);
   const isRevealedRef = useRef(false);
   const isScratchingRef = useRef(false);
-  const lastPointRef = useRef<{ x: number; y: number } | null>(null);
-  const strokeCountRef = useRef(0);
+  const lastPointRef = useRef<{
+    x: number;
+    y: number;
+    cssX: number;
+    cssY: number;
+  } | null>(null);
+  const scratchDistanceRef = useRef<number>(0);
   const checkThrottleRef = useRef<number>(0);
 
-  // Permanently reveal the card and remove the scratch foil
+  // Permanently reveal the card and dissolve the scratch foil
   const triggerReveal = useCallback(() => {
     if (isRevealedRef.current) return;
     isRevealedRef.current = true;
@@ -96,7 +100,7 @@ export function DateScratchCard() {
     ctx.fillStyle = "#5C3806";
     ctx.fillText(t.scratchCard.subInstruction, w / 2, h / 2 + 25 * dpr);
 
-    strokeCountRef.current = 0;
+    scratchDistanceRef.current = 0;
   }, [t.scratchCard.instruction, t.scratchCard.subInstruction]);
 
   // Initial draw once on mount, and redraw on resize ONLY if not yet revealed
@@ -116,10 +120,8 @@ export function DateScratchCard() {
     const canvas = canvasRef.current;
     if (!canvas || isRevealedRef.current) return;
 
-    if (strokeCountRef.current >= 3) {
-      triggerReveal();
-      return;
-    }
+    // Only check if user has actually moved their finger significantly (> 100px)
+    if (scratchDistanceRef.current < 100) return;
 
     const ctx = canvas.getContext("2d", { willReadFrequently: true });
     if (!ctx) return;
@@ -144,7 +146,8 @@ export function DateScratchCard() {
     }
 
     const percentage = transparentCount / totalSampled;
-    if (percentage > 0.03) {
+    // Auto-reveal if at least 12% has been scratched
+    if (percentage > 0.12) {
       triggerReveal();
     }
   }, [triggerReveal]);
@@ -172,6 +175,10 @@ export function DateScratchCard() {
       ctx.lineJoin = "round";
 
       if (lastPointRef.current) {
+        const dx = clientX - lastPointRef.current.cssX;
+        const dy = clientY - lastPointRef.current.cssY;
+        scratchDistanceRef.current += Math.hypot(dx, dy);
+
         ctx.beginPath();
         ctx.moveTo(lastPointRef.current.x, lastPointRef.current.y);
         ctx.lineTo(currX, currY);
@@ -183,12 +190,11 @@ export function DateScratchCard() {
       }
 
       ctx.restore();
-      lastPointRef.current = { x: currX, y: currY };
-      strokeCountRef.current += 1;
+      lastPointRef.current = { x: currX, y: currY, cssX: clientX, cssY: clientY };
 
       // Throttle reveal check
       const now = Date.now();
-      if (now - checkThrottleRef.current > 70) {
+      if (now - checkThrottleRef.current > 80) {
         checkThrottleRef.current = now;
         checkRevealPercentage();
       }
@@ -196,7 +202,7 @@ export function DateScratchCard() {
     [checkRevealPercentage],
   );
 
-  // Native touch & mouse event listeners
+  // Native touch & mouse event listeners — ONLY triggers reveal on true scratching, NEVER on tap
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -209,6 +215,7 @@ export function DateScratchCard() {
       if (touch) {
         isScratchingRef.current = true;
         lastPointRef.current = null;
+        scratchDistanceRef.current = 0;
         scratch(touch.clientX, touch.clientY);
       }
     };
@@ -223,7 +230,8 @@ export function DateScratchCard() {
     };
 
     const onTouchEnd = () => {
-      if (strokeCountRef.current > 0) {
+      // ONLY reveal if the user genuinely scratched across the card (> 90px finger travel)
+      if (scratchDistanceRef.current > 90) {
         triggerReveal();
       }
       isScratchingRef.current = false;
@@ -236,6 +244,7 @@ export function DateScratchCard() {
       e.preventDefault();
       isScratchingRef.current = true;
       lastPointRef.current = null;
+      scratchDistanceRef.current = 0;
       scratch(e.clientX, e.clientY);
     };
 
@@ -246,25 +255,21 @@ export function DateScratchCard() {
     };
 
     const onMouseUp = () => {
-      if (strokeCountRef.current > 0) {
+      // ONLY reveal if mouse genuinely scratched (> 90px movement)
+      if (scratchDistanceRef.current > 90) {
         triggerReveal();
       }
       isScratchingRef.current = false;
       lastPointRef.current = null;
     };
 
-    // Click / Tap directly reveals as fallback
-    const onClick = () => {
-      triggerReveal();
-    };
-
+    // NO click listener — tapping does NOT reveal!
     canvas.addEventListener("touchstart", onTouchStart, { passive: false });
     canvas.addEventListener("touchmove", onTouchMove, { passive: false });
     canvas.addEventListener("touchend", onTouchEnd);
     canvas.addEventListener("touchcancel", onTouchEnd);
 
     canvas.addEventListener("mousedown", onMouseDown);
-    canvas.addEventListener("click", onClick);
     window.addEventListener("mousemove", onMouseMove);
     window.addEventListener("mouseup", onMouseUp);
 
@@ -275,17 +280,10 @@ export function DateScratchCard() {
       canvas.removeEventListener("touchcancel", onTouchEnd);
 
       canvas.removeEventListener("mousedown", onMouseDown);
-      canvas.removeEventListener("click", onClick);
       window.removeEventListener("mousemove", onMouseMove);
       window.removeEventListener("mouseup", onMouseUp);
     };
   }, [scratch, triggerReveal]);
-
-  const resetCard = () => {
-    isRevealedRef.current = false;
-    setIsRevealed(false);
-    drawFoil();
-  };
 
   return (
     <section
@@ -339,34 +337,16 @@ export function DateScratchCard() {
           {/* SCRATCH CANVAS OVERLAY */}
           <canvas
             ref={canvasRef}
-            className={`absolute inset-0 z-20 h-full w-full cursor-pointer select-none transition-opacity duration-500 ease-out ${
+            className={`absolute inset-0 z-20 h-full w-full cursor-pointer select-none transition-opacity duration-700 ease-out ${
               isRevealed ? "pointer-events-none opacity-0" : "opacity-100"
             }`}
             style={{
               touchAction: "none",
               transform: "translateZ(0)",
-              display: isRevealed ? "none" : "block",
             }}
             aria-label={t.scratchCard.instruction}
           />
         </div>
-
-        {/* Status / Replay option (only when revealed) */}
-        {isRevealed && (
-          <div className="mt-4 flex flex-col items-center gap-2">
-            <span className="inline-flex items-center gap-1 font-display text-sm font-semibold text-stone-800">
-              {t.scratchCard.scratchedBadge}
-            </span>
-            <button
-              type="button"
-              onClick={resetCard}
-              className="inline-flex items-center gap-1 rounded-full border border-gold-soft/60 bg-white/80 px-3.5 py-1 font-sans text-[0.75rem] font-medium text-stone-600 shadow-xs transition-colors hover:border-gold hover:text-stone-900"
-            >
-              <RotateCcw className="h-3 w-3" />
-              {t.scratchCard.resetButton}
-            </button>
-          </div>
-        )}
       </div>
     </section>
   );
