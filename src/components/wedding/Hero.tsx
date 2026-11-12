@@ -45,21 +45,21 @@ export function Hero() {
             fetchPriority="high"
             loading="eager"
             decoding="async"
-            className="absolute left-1/2 top-[19.5%] w-[12cqw] -translate-x-1/2 md:top-[4.5%] md:w-[4.6cqw]"
+            className="absolute left-1/2 top-[12%] w-[11.5cqw] -translate-x-1/2 md:top-[4.5%] md:w-[4.6cqw]"
           />
 
           {/* Invitation text */}
-          <div className="on-photo absolute inset-x-0 top-[28.5%] flex flex-col items-center text-center md:top-[14.5%]">
+          <div className="on-photo absolute inset-x-0 top-[19%] flex flex-col items-center text-center md:top-[14.5%]">
             <div className="pointer-events-none absolute left-1/2 top-1/2 -z-0 h-[150%] w-[70cqw] -translate-x-1/2 -translate-y-1/2 bg-[radial-gradient(ellipse_at_center,color-mix(in_oklab,var(--ink)_42%,transparent),transparent_68%)] md:w-[34cqw]" />
-            <p className="relative font-sans text-[max(0.55rem,2.4cqw)] font-medium uppercase tracking-[0.3em] md:text-[max(0.6rem,0.72cqw)]">
+            <p className="relative font-sans text-[max(0.55rem,2.2cqw)] font-medium uppercase tracking-[0.3em] md:text-[max(0.6rem,0.72cqw)]">
               {t.hero.invited}
             </p>
-            <p className="relative mt-[1.2cqw] font-display text-[4.8cqw] italic md:mt-[0.5cqw] md:text-[1.7cqw]">
+            <p className="relative mt-[0.8cqw] font-display text-[4.3cqw] italic md:mt-[0.5cqw] md:text-[1.7cqw]">
               {t.hero.toTheWedding}
             </p>
-            <h1 className="relative mt-[0.6cqw] whitespace-nowrap font-display text-[8cqw] font-medium leading-none md:mt-[0.2cqw] md:text-[3.7cqw]">
+            <h1 className="relative mt-[0.4cqw] whitespace-nowrap font-display text-[7.5cqw] font-medium leading-none md:mt-[0.2cqw] md:text-[3.7cqw]">
               {t.couple.groom}
-              <span className="mx-[1.5cqw] italic text-gold-soft md:mx-[0.6cqw]">
+              <span className="mx-[1.2cqw] italic text-gold-soft md:mx-[0.6cqw]">
                 {t.couple.amp}
               </span>
               {t.couple.bride}

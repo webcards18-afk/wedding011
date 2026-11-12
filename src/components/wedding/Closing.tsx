@@ -13,36 +13,40 @@ export function Closing() {
 
       <Reveal>
         <p className="eyebrow">{t.closing.eyebrow}</p>
-        <h2 className="serif-xl mt-4 text-muted-foreground">{t.closing.title}</h2>
+        <h2 className="serif-xl mt-4 text-stone-900 font-normal drop-shadow-xs">
+          {t.closing.title}
+        </h2>
       </Reveal>
       <Reveal delay={150}>
         <Monogram className="animate-float-soft mx-auto mt-8 w-36 md:w-44" />
-        <p className="mt-4 font-display text-xl uppercase tracking-[0.25em]">
+        <p className="mt-5 font-display text-2xl sm:text-3xl font-semibold uppercase tracking-[0.22em] text-gold-deep">
           {t.couple.groom} {t.couple.amp} {t.couple.bride}
         </p>
       </Reveal>
       <Reveal delay={250}>
         <p className="sr-only">{t.closing.hashtags}</p>
-        <ul className="mx-auto mt-8 flex max-w-2xl flex-wrap justify-center gap-x-3 gap-y-2">
+        <ul className="mx-auto mt-8 flex max-w-xl flex-wrap justify-center gap-2.5 sm:gap-3">
           {wedding.hashtags.map((h) => (
             <li
               key={h}
-              className="rounded-full border border-gold-soft/60 bg-cream-soft/70 px-3.5 py-1 font-sans text-[0.75rem] text-gold-deep shadow-sm backdrop-blur-sm transition-colors hover:border-gold hover:text-ink"
+              className="rounded-full border border-gold-soft/80 bg-white/90 px-4 py-1.5 font-sans text-xs sm:text-sm font-semibold text-stone-800 shadow-xs backdrop-blur-sm transition-all hover:border-gold-deep hover:bg-gold-deep hover:text-white hover:shadow-md"
             >
               {h}
             </li>
           ))}
         </ul>
-        <p className="mt-14 font-sans text-[0.72rem] text-muted-foreground">{t.closing.dates}</p>
+        <p className="mt-12 font-display text-base sm:text-lg font-medium tracking-wide text-stone-800">
+          {t.closing.dates}
+        </p>
         <button
           type="button"
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          className="group mt-6 inline-flex items-center gap-2 rounded-full border border-gold-soft/70 bg-cream-soft/80 px-4 py-2 font-sans text-[0.75rem] text-muted-foreground shadow-sm backdrop-blur-sm transition-all hover:border-gold hover:text-foreground hover:shadow-md"
+          className="group mt-6 inline-flex items-center gap-2 rounded-full border border-gold-soft/90 bg-white/95 px-6 py-2.5 font-sans text-sm font-semibold text-stone-800 shadow-sm backdrop-blur-sm transition-all hover:border-gold-deep hover:bg-gold-deep hover:text-white hover:shadow-md"
         >
           {t.closing.backToTop}
           <ArrowUp
-            className="h-3 w-3 text-gold transition-transform duration-500 group-hover:-translate-y-1"
-            strokeWidth={1.5}
+            className="h-3.5 w-3.5 text-gold-deep transition-transform duration-300 group-hover:-translate-y-1 group-hover:text-white"
+            strokeWidth={2}
           />
         </button>
       </Reveal>
