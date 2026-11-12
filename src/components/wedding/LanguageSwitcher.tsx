@@ -20,10 +20,10 @@ export function LanguageSwitcher({ className }: { className?: string }) {
             aria-pressed={active}
             onClick={() => setLang(l.code)}
             className={cn(
-              "border-b px-3 py-2 font-sans text-xs transition-colors duration-300",
+              "rounded-full px-2.5 py-1 font-sans text-xs font-semibold transition-all duration-200",
               active
-                ? "border-gold text-foreground"
-                : "border-transparent text-muted-foreground hover:text-foreground",
+                ? "bg-gold-deep text-white shadow-xs font-bold"
+                : "text-stone-800 hover:bg-gold-soft/30 hover:text-stone-950",
             )}
           >
             {l.code === "en" ? "EN" : l.label}
