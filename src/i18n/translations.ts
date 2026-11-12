@@ -41,6 +41,14 @@ export interface Dictionary {
     target: string;
     done: string;
   };
+  scratchCard: {
+    title: string;
+    instruction: string;
+    subInstruction: string;
+    revealButton: string;
+    scratchedBadge: string;
+    resetButton: string;
+  };
   families: {
     eyebrow: string;
     title: string;
@@ -130,6 +138,14 @@ const en: Dictionary = {
     seconds: "Seconds",
     target: "Anand Karaj · 13 December 2026 · 4:00 AM IST",
     done: "Forever has begun.",
+  },
+  scratchCard: {
+    title: "Auspicious Wedding Dates",
+    instruction: "Scratch to Reveal Dates",
+    subInstruction: "Rub with finger or mouse",
+    revealButton: "Tap to reveal directly",
+    scratchedBadge: "Auspicious Dates Revealed ✨",
+    resetButton: "Scratch again",
   },
   families: {
     eyebrow: "With the blessings of God and our parents",
@@ -290,6 +306,14 @@ const hi: Dictionary = {
     target: "आनंद कारज · 13 दिसंबर 2026 · प्रातः 4:00 बजे",
     done: "हमेशा का साथ शुरू हो गया।",
   },
+  scratchCard: {
+    title: "विवाह की शुभ तिथियाँ",
+    instruction: "शुभ तिथियाँ देखने के लिए स्क्रैच करें",
+    subInstruction: "उंगली या माउस से रगड़ें",
+    revealButton: "सीधे देखने के लिए दबाएं",
+    scratchedBadge: "शुभ तिथियाँ प्रकट हुईं ✨",
+    resetButton: "पुनः स्क्रैच करें",
+  },
   families: {
     eyebrow: "ईश्वर एवं माता-पिता के आशीर्वाद से",
     title: "दो दिल। दो परिवार।",
@@ -423,6 +447,14 @@ const hinglish: Dictionary = {
     seconds: "Second",
     target: "Anand Karaj · 13 December 2026 · Subah 4:00 baje",
     done: "Hamesha ka saath shuru ho gaya.",
+  },
+  scratchCard: {
+    title: "Wedding Dates & Countdown",
+    instruction: "Dates dekhne ke liye scratch karein",
+    subInstruction: "Ungli ya mouse se rub karein",
+    revealButton: "Directly dekhne ke liye tap karein",
+    scratchedBadge: "Dates Reveal Ho Gayi ✨",
+    resetButton: "Phir se scratch karein",
   },
   families: {
     eyebrow: "Rab aur maa-baap ke aashirwaad se",

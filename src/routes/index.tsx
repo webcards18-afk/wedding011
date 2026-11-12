@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { LanguageProvider } from "@/i18n/LanguageContext";
 import { TopBar } from "@/components/wedding/TopBar";
 import { Hero } from "@/components/wedding/Hero";
+import { DateScratchCard } from "@/components/wedding/DateScratchCard";
 import { Families } from "@/components/wedding/Families";
 import { Celebrations } from "@/components/wedding/Celebrations";
 import { Venues } from "@/components/wedding/Venues";
@@ -36,6 +37,7 @@ function Index() {
         <TopBar />
         <main>
           <Hero />
+          <DateScratchCard />
           <Families />
           <div className="px-[3vw]">
             <div className="hairline mx-auto max-w-4xl" />

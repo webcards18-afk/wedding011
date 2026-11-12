@@ -3,7 +3,13 @@ import { wedding } from "@/config/wedding";
 import { getTimeLeft, type TimeLeft } from "@/lib/countdown";
 import { useLanguage } from "@/i18n/LanguageContext";
 
-export function Countdown() {
+export function Countdown({
+  className = "",
+  dark = false,
+}: {
+  className?: string;
+  dark?: boolean;
+}) {
   const { t } = useLanguage();
   const [left, setLeft] = useState<TimeLeft | null>(null);
 
@@ -16,7 +22,15 @@ export function Countdown() {
 
   if (left?.done) {
     return (
-      <p className="font-display text-[max(1rem,4.5cqw)] md:text-[1.6cqw]">{t.countdown.done}</p>
+      <p
+        className={
+          dark
+            ? "font-display text-lg font-medium text-stone-900"
+            : "font-display text-[max(1rem,4.5cqw)] md:text-[1.6cqw]"
+        }
+      >
+        {t.countdown.done}
+      </p>
     );
   }
 
@@ -27,8 +41,34 @@ export function Countdown() {
     [left?.seconds, t.countdown.seconds],
   ];
 
+  if (dark) {
+    return (
+      <div
+        className={`flex items-start justify-center gap-3.5 sm:gap-6 ${className}`}
+        aria-live="off"
+      >
+        {units.map(([value, label]) => (
+          <div key={label} className="flex min-w-[54px] sm:min-w-[64px] flex-col items-center">
+            <span
+              key={value}
+              className="animate-tick font-sans text-2xl sm:text-3xl font-bold leading-none tabular-nums text-stone-900"
+            >
+              {value === undefined ? "––" : String(value).padStart(2, "0")}
+            </span>
+            <span className="mt-1.5 font-sans text-[0.7rem] sm:text-xs font-semibold uppercase tracking-wider text-amber-900/80">
+              {label}
+            </span>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
   return (
-    <div className="flex items-start justify-center gap-[5cqw] md:gap-[1.8cqw]" aria-live="off">
+    <div
+      className={`flex items-start justify-center gap-[5cqw] md:gap-[1.8cqw] ${className}`}
+      aria-live="off"
+    >
       {units.map(([value, label]) => (
         <div key={label} className="flex min-w-[9cqw] flex-col items-center md:min-w-[3.2cqw]">
           <span

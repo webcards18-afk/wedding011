@@ -1,6 +1,5 @@
 import { media } from "@/config/media";
 import { useLanguage } from "@/i18n/LanguageContext";
-import { Countdown } from "./Countdown";
 
 /**
  * Illustrated palace arch with the couple photograph framed inside it,
@@ -66,19 +65,17 @@ export function Hero() {
             </h1>
           </div>
 
-          {/* Dates, place and countdown over the photo */}
-          <div className="on-photo absolute inset-x-0 bottom-[20.5%] flex flex-col items-center text-center md:bottom-[20.5%]">
-            <p className="font-sans text-[max(0.8rem,4cqw)] font-medium md:text-[1.3cqw]">
-              {t.hero.dates}
-            </p>
-            <p className="mt-[0.5cqw] font-sans text-[max(0.6rem,2.7cqw)] opacity-90 md:mt-[0.2cqw] md:text-[0.85cqw]">
-              {t.hero.place}
-            </p>
-            <p className="mb-[1.6cqw] mt-[2.6cqw] font-sans text-[max(0.5rem,2.1cqw)] uppercase tracking-[0.3em] opacity-85 md:mb-[0.6cqw] md:mt-[1.1cqw] md:text-[max(0.55rem,0.62cqw)]">
-              {t.countdown.eyebrow}
-            </p>
-            <Countdown />
-          </div>
+          {/* Scroll down prompt pointing to the scratch card below */}
+          <a
+            href="#dates-scratch-card"
+            className="on-photo absolute bottom-4 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center text-center transition-transform hover:scale-105 active:scale-95 md:bottom-6"
+            aria-label={t.hero.scroll}
+          >
+            <span className="font-sans text-[0.7rem] font-semibold uppercase tracking-[0.28em] text-white/95 drop-shadow-md">
+              {t.hero.scroll}
+            </span>
+            <span className="animate-bounce mt-1 text-sm text-white/95 drop-shadow-md">↓</span>
+          </a>
         </div>
       </div>
     </section>
