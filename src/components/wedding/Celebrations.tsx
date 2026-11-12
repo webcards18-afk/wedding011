@@ -204,7 +204,7 @@ export function Celebrations() {
                       <li
                         key={e.id}
                         className={cn(
-                          "relative overflow-hidden rounded-2xl border p-5 shadow-[0_6px_20px_-8px_rgba(0,0,0,0.08)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_12px_32px_-10px_rgba(0,0,0,0.18)] md:p-6",
+                          "relative overflow-hidden rounded-2xl border p-4 shadow-[0_6px_20px_-8px_rgba(0,0,0,0.08)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_12px_32px_-10px_rgba(0,0,0,0.18)] sm:p-5 md:p-6",
                           theme.cardBg,
                           theme.borderColor,
                         )}
@@ -216,22 +216,16 @@ export function Celebrations() {
 
                         <Reveal
                           delay={Math.min(i * 40, 120)}
-                          className="flex items-start gap-4 pl-1 md:gap-6"
+                          className="flex items-center gap-3.5 pl-1 sm:gap-5 md:gap-6"
                         >
-                          <div
-                            className={cn(
-                              "flex h-24 w-24 shrink-0 items-center justify-center rounded-2xl border p-1 shadow-md transition-transform duration-300 hover:scale-105 sm:h-28 sm:w-28 md:h-32 md:w-32 md:p-1.5",
-                              theme.iconBg,
-                              theme.borderColor,
-                            )}
-                          >
+                          <div className="relative flex h-28 w-28 shrink-0 items-center justify-center transition-transform duration-300 hover:scale-105 sm:h-32 sm:w-32 md:h-36 md:w-36">
                             <img
                               src={eventIcons[e.icon]}
                               alt=""
                               width={256}
                               height={256}
                               loading="lazy"
-                              className="h-full w-full rounded-xl object-contain drop-shadow-md"
+                              className="h-full w-full rounded-2xl object-contain drop-shadow-[0_8px_20px_rgba(0,0,0,0.18)]"
                             />
                           </div>
                           <div className="min-w-0 flex-1">
