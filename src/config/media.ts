@@ -3,9 +3,8 @@
  * src/assets and point these imports at them — every section updates automatically.
  */
 import archDesktop from "@/assets/hero-arch-frame.webp";
-import archMobile from "@/assets/hero-arch-frame-mobile.webp";
-import couplePhoto from "@/assets/couple-portrait.webp";
-import coupleIllustration from "@/assets/couple-watercolor.webp";
+import archMobile from "@/assets/hero-arch-frame-mobile.png";
+import coupleIllustration from "@/assets/couple-watercolor.png";
 import ganesh from "@/assets/shri-ganesh-emblem.webp";
 
 import kirtan from "@/assets/icons/kirtan.png";
@@ -21,10 +20,8 @@ import anand from "@/assets/icons/anand.png";
 export const media = {
   /** Illustrated palace arch behind the hero. */
   heroFrame: { desktop: archDesktop, mobile: archMobile },
-  /** Couple photograph shown inside the arch. */
-  heroCouple: { src: couplePhoto, width: 1000, height: 1253 },
   /** Couple illustration in "Two hearts. Two families." */
-  familyIllustration: { src: coupleIllustration, width: 900, height: 900 },
+  familyIllustration: { src: coupleIllustration, width: 1254, height: 1254 },
   ganesh: { src: ganesh, width: 229, height: 240 },
 };
 

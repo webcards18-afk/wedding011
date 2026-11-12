@@ -27,29 +27,14 @@ export function Hero() {
             <img
               src={media.heroFrame.mobile}
               alt=""
-              width={1088}
-              height={1600}
+              width={1025}
+              height={1535}
               fetchPriority="high"
               loading="eager"
               decoding="async"
               className="h-full w-full object-cover object-center"
             />
           </picture>
-
-          {/* Couple photograph inside the arch */}
-          <div className="absolute left-[23%] top-[42.5%] h-[39%] w-[54%] overflow-hidden shadow-[var(--shadow-soft)] md:left-[36.5%] md:top-[28.5%] md:h-[53.5%] md:w-[27%]">
-            <img
-              src={media.heroCouple.src}
-              alt={`${t.couple.groom} ${t.couple.amp} ${t.couple.bride}`}
-              width={media.heroCouple.width}
-              height={media.heroCouple.height}
-              fetchPriority="high"
-              loading="eager"
-              decoding="async"
-              className="h-full w-full object-cover object-[50%_18%]"
-            />
-            <div className="veil-bottom absolute inset-0" />
-          </div>
 
           {/* Shri Ganesh */}
           <img
