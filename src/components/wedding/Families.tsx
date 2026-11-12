@@ -42,15 +42,18 @@ export function Families() {
 
       <Reveal
         delay={100}
-        className="mx-auto mt-10 grid max-w-lg grid-cols-2 rounded-2xl border border-gold-soft/60 bg-cream-soft/70 p-6 shadow-[0_10px_35px_-15px_rgba(148,100,32,0.12)] backdrop-blur-sm"
+        className="mx-auto mt-10 grid max-w-lg grid-cols-2 rounded-2xl border border-gold-soft/60 bg-cream-soft/70 px-3 py-5 shadow-[0_10px_35px_-15px_rgba(148,100,32,0.12)] backdrop-blur-sm sm:p-6"
       >
         {columns.map((c, i) => (
-          <div key={c.name} className={i === 0 ? "border-r border-gold-soft pr-4" : "pl-4"}>
-            <h3 className="font-display text-2xl">{c.name}</h3>
+          <div
+            key={c.name}
+            className={i === 0 ? "border-r border-gold-soft/70 pr-2 sm:pr-4" : "pl-2 sm:pl-4"}
+          >
+            <h3 className="font-display text-xl sm:text-2xl">{c.name}</h3>
             <p className="mt-1 font-display text-xs italic text-muted-foreground">{c.relation}</p>
-            <div className="mt-3 space-y-0.5 font-display text-[0.95rem] leading-snug">
-              <p>{c.parents[0]}</p>
-              <p>{c.parents[1]}</p>
+            <div className="mt-3 space-y-1 font-display text-[0.82rem] leading-snug min-[370px]:text-[0.88rem] sm:text-[0.95rem]">
+              <p className="whitespace-nowrap">{c.parents[0]}</p>
+              <p className="whitespace-nowrap">{c.parents[1]}</p>
             </div>
           </div>
         ))}
