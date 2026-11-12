@@ -11,6 +11,7 @@ export function Hero() {
     <section
       id="top"
       className="relative flex h-[100dvh] min-h-[100dvh] w-full items-center justify-center overflow-hidden m-0 p-0 md:h-auto md:min-h-0 md:px-[3vw] md:pb-6 md:pt-16"
+      style={{ isolation: "isolate", transform: "translateZ(0)" }}
       aria-label={t.hero.invited}
     >
       <div className="@container relative flex h-full w-full items-center justify-center overflow-hidden max-w-[1440px] mx-auto md:aspect-auto">
