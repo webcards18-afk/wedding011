@@ -8,15 +8,15 @@ import couplePhoto from "@/assets/couple-portrait.webp";
 import coupleIllustration from "@/assets/couple-watercolor.webp";
 import ganesh from "@/assets/shri-ganesh-emblem.webp";
 
-import kirtan from "@/assets/icons/kirtan.webp";
-import shagun from "@/assets/icons/shagun.webp";
-import haldi from "@/assets/icons/haldi.webp";
-import ring from "@/assets/icons/ring.webp";
-import jaggo from "@/assets/icons/jaggo.webp";
-import mehndi from "@/assets/icons/mehndi.webp";
-import sehra from "@/assets/icons/sehra.webp";
-import baraat from "@/assets/icons/baraat.webp";
-import anand from "@/assets/icons/anand.webp";
+import kirtan from "@/assets/icons/kirtan.png";
+import shagun from "@/assets/icons/shagun.png";
+import haldi from "@/assets/icons/haldi.png";
+import ring from "@/assets/icons/ring.png";
+import jaggo from "@/assets/icons/jaggo.png";
+import mehndi from "@/assets/icons/mehndi.png";
+import sehra from "@/assets/icons/sehra.png";
+import baraat from "@/assets/icons/baraat.png";
+import anand from "@/assets/icons/anand.png";
 
 export const media = {
   /** Illustrated palace arch behind the hero. */
