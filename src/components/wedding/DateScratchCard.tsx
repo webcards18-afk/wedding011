@@ -11,7 +11,13 @@ export function DateScratchCard() {
   const [isRevealed, setIsRevealed] = useState(false);
   const isScratchingRef = useRef(false);
   const lastPointRef = useRef<{ x: number; y: number } | null>(null);
+  const strokeCountRef = useRef(0);
   const checkThrottleRef = useRef<number>(0);
+
+  // Trigger full reveal with smooth dissolve
+  const triggerReveal = useCallback(() => {
+    setIsRevealed(true);
+  }, []);
 
   // Draw the initial royal gold foil onto canvas
   const drawFoil = useCallback(() => {
@@ -34,7 +40,7 @@ export function DateScratchCard() {
     const w = canvas.width;
     const h = canvas.height;
 
-    // Reset any previous transform
+    // Reset transform & state
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.globalCompositeOperation = "source-over";
 
@@ -59,7 +65,7 @@ export function DateScratchCard() {
       ctx.fillRect(rx, ry, size, size);
     }
 
-    // 3. Elegant border
+    // 3. Elegant borders
     ctx.strokeStyle = "rgba(180, 130, 40, 0.4)";
     ctx.lineWidth = 2 * dpr;
     ctx.strokeRect(10 * dpr, 10 * dpr, w - 20 * dpr, h - 20 * dpr);
@@ -87,6 +93,7 @@ export function DateScratchCard() {
     ctx.fillStyle = "#5C3806";
     ctx.fillText(t.scratchCard.subInstruction, w / 2, h / 2 + 25 * dpr);
 
+    strokeCountRef.current = 0;
     setIsRevealed(false);
   }, [t.scratchCard.instruction, t.scratchCard.subInstruction]);
 
@@ -104,6 +111,12 @@ export function DateScratchCard() {
   const checkRevealPercentage = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas || isRevealed) return;
+
+    // If user has made at least 4 stroke segments, auto-reveal!
+    if (strokeCountRef.current >= 4) {
+      triggerReveal();
+      return;
+    }
 
     const ctx = canvas.getContext("2d", { willReadFrequently: true });
     if (!ctx) return;
@@ -128,11 +141,11 @@ export function DateScratchCard() {
     }
 
     const percentage = transparentCount / totalSampled;
-    // Auto-reveal if scratched past 20%
-    if (percentage > 0.2) {
-      setIsRevealed(true);
+    // Auto-reveal as soon as even 4% of the card is scratched
+    if (percentage > 0.04) {
+      triggerReveal();
     }
-  }, [isRevealed]);
+  }, [isRevealed, triggerReveal]);
 
   // Scratch action directly in canvas pixel coordinate space
   const scratch = useCallback(
@@ -144,11 +157,10 @@ export function DateScratchCard() {
       if (!ctx) return;
 
       const rect = canvas.getBoundingClientRect();
-      // Exact canvas pixel coordinates mapping
       const currX = ((clientX - rect.left) / rect.width) * canvas.width;
       const currY = ((clientY - rect.top) / rect.height) * canvas.height;
 
-      const brushRadius = Math.max(28, rect.width * 0.08 * (canvas.width / rect.width));
+      const brushRadius = Math.max(30, rect.width * 0.09 * (canvas.width / rect.width));
 
       ctx.save();
       ctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -170,10 +182,11 @@ export function DateScratchCard() {
 
       ctx.restore();
       lastPointRef.current = { x: currX, y: currY };
+      strokeCountRef.current += 1;
 
       // Throttle reveal check
       const now = Date.now();
-      if (now - checkThrottleRef.current > 100) {
+      if (now - checkThrottleRef.current > 80) {
         checkThrottleRef.current = now;
         checkRevealPercentage();
       }
@@ -208,9 +221,12 @@ export function DateScratchCard() {
     };
 
     const onTouchEnd = () => {
+      if (strokeCountRef.current > 0) {
+        // Once finger lifts after scratching, immediately dissolve and reveal all!
+        triggerReveal();
+      }
       isScratchingRef.current = false;
       lastPointRef.current = null;
-      checkRevealPercentage();
     };
 
     // Desktop mouse handlers
@@ -229,9 +245,16 @@ export function DateScratchCard() {
     };
 
     const onMouseUp = () => {
+      if (strokeCountRef.current > 0) {
+        triggerReveal();
+      }
       isScratchingRef.current = false;
       lastPointRef.current = null;
-      checkRevealPercentage();
+    };
+
+    // Click / Tap directly reveals as fallback
+    const onClick = () => {
+      triggerReveal();
     };
 
     canvas.addEventListener("touchstart", onTouchStart, { passive: false });
@@ -240,6 +263,7 @@ export function DateScratchCard() {
     canvas.addEventListener("touchcancel", onTouchEnd);
 
     canvas.addEventListener("mousedown", onMouseDown);
+    canvas.addEventListener("click", onClick);
     window.addEventListener("mousemove", onMouseMove);
     window.addEventListener("mouseup", onMouseUp);
 
@@ -250,10 +274,11 @@ export function DateScratchCard() {
       canvas.removeEventListener("touchcancel", onTouchEnd);
 
       canvas.removeEventListener("mousedown", onMouseDown);
+      canvas.removeEventListener("click", onClick);
       window.removeEventListener("mousemove", onMouseMove);
       window.removeEventListener("mouseup", onMouseUp);
     };
-  }, [checkRevealPercentage, isRevealed, scratch]);
+  }, [isRevealed, scratch, triggerReveal]);
 
   const resetCard = () => {
     drawFoil();
@@ -272,27 +297,27 @@ export function DateScratchCard() {
         {/* The Scratch Card Box */}
         <div
           ref={containerRef}
-          className="relative min-h-[260px] overflow-hidden rounded-3xl border-2 border-gold-soft/80 bg-gradient-to-b from-[#FFFDF9] via-[#FAF4E8] to-[#F5EAD4] p-6 text-center shadow-[0_16px_45px_-12px_rgba(180,120,40,0.22)] sm:min-h-[280px] sm:p-7"
+          className="relative min-h-[260px] overflow-hidden rounded-3xl border-2 border-gold-soft/80 bg-gradient-to-b from-[#FFFDF9] via-[#FAF4E8] to-[#F5EAD4] p-5 text-center shadow-[0_16px_45px_-12px_rgba(180,120,40,0.22)] sm:min-h-[280px] sm:p-7"
         >
           {/* Subtle ornamental glow inside */}
           <div className="pointer-events-none absolute -right-8 -top-8 h-28 w-28 rounded-full bg-gold-soft/20 blur-2xl" />
           <div className="pointer-events-none absolute -bottom-8 -left-8 h-28 w-28 rounded-full bg-amber-500/15 blur-2xl" />
 
           {/* REVEALED CONTENT UNDERNEATH */}
-          <div className="relative z-10 flex h-full flex-col items-center justify-center">
+          <div className="relative z-10 flex h-full min-h-[250px] flex-col items-center justify-center py-2 sm:py-3">
             {/* Auspicious Dates */}
-            <p className="font-display text-2xl font-semibold tracking-wide text-stone-900 sm:text-3xl">
+            <h3 className="font-display text-2xl font-bold tracking-wide text-stone-900 sm:text-3xl">
               {t.hero.dates}
-            </p>
+            </h3>
             <p className="mt-1 font-display text-sm font-medium italic text-amber-900/90 sm:text-base">
               {t.hero.place}
             </p>
 
             {/* Decorative gold divider */}
-            <div className="my-4 flex items-center justify-center gap-2">
-              <span className="h-[1px] w-12 bg-gradient-to-r from-transparent to-gold-soft" />
+            <div className="my-3 flex items-center justify-center gap-2">
+              <span className="h-[1px] w-14 bg-gradient-to-r from-transparent to-gold-soft" />
               <span className="text-xs text-gold-deep">✦</span>
-              <span className="h-[1px] w-12 bg-gradient-to-l from-transparent to-gold-soft" />
+              <span className="h-[1px] w-14 bg-gradient-to-l from-transparent to-gold-soft" />
             </div>
 
             {/* Countdown subtitle */}
@@ -301,7 +326,7 @@ export function DateScratchCard() {
             </p>
 
             {/* High-contrast Countdown Clock */}
-            <div className="mt-3.5">
+            <div className="mt-3">
               <Countdown dark />
             </div>
           </div>
@@ -326,7 +351,7 @@ export function DateScratchCard() {
             <button
               type="button"
               onClick={resetCard}
-              className="inline-flex items-center gap-1 rounded-full border border-gold-soft/60 bg-white/80 px-3.5 py-1 font-sans text-[0.75rem] font-medium text-stone-600 transition-colors hover:border-gold hover:text-stone-900 shadow-xs"
+              className="inline-flex items-center gap-1 rounded-full border border-gold-soft/60 bg-white/80 px-3.5 py-1 font-sans text-[0.75rem] font-medium text-stone-600 shadow-xs transition-colors hover:border-gold hover:text-stone-900"
             >
               <RotateCcw className="h-3 w-3" />
               {t.scratchCard.resetButton}
