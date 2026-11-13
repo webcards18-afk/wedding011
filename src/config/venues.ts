@@ -32,10 +32,13 @@ export const venues: Venue[] = [
   {
     id: "taj",
     image: tajMoga,
-    mapsQuery: "Hotel Taj, Moga, Punjab",
+    mapsQuery: "https://maps.app.goo.gl/Kewg2KLRLqhU7N4v5?g_st=aw",
   },
 ];
 
 export function mapsUrl(query: string) {
+  if (query.startsWith("http://") || query.startsWith("https://")) {
+    return query;
+  }
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
 }
