@@ -15,18 +15,36 @@ export interface FamilyContact {
 
 export const contacts: { bride: FamilyContact[]; groom: FamilyContact[] } = {
   bride: [
-    { id: "bride-father", person: "sanjeev", relation: "fatherOfBride", whatsapp: "" },
-    { id: "bride-mother", person: "sanya", relation: "motherOfBride", whatsapp: "" },
+    {
+      id: "bride-father",
+      person: "sanjeev",
+      relation: "fatherOfBride",
+      whatsapp: "+91 94170 30792",
+    },
+    { id: "bride-mother", person: "sanya", relation: "motherOfBride", whatsapp: "+91 76963 55117" },
   ],
   groom: [
-    { id: "groom-father", person: "deepak", relation: "fatherOfGroom", whatsapp: "" },
-    { id: "groom-mother", person: "vaishali", relation: "motherOfGroom", whatsapp: "" },
+    {
+      id: "groom-father",
+      person: "deepak",
+      relation: "fatherOfGroom",
+      whatsapp: "+91 98766 21266",
+    },
+    {
+      id: "groom-mother",
+      person: "vaishali",
+      relation: "motherOfGroom",
+      whatsapp: "+91 62803 48231",
+    },
   ],
 };
 
 /** Returns a wa.me link, or null when no usable number is configured. */
 export function whatsappLink(number: string, message = "") {
-  const digits = number.replace(/\D/g, "");
+  let digits = number.replace(/\D/g, "");
+  if (digits.length === 10) {
+    digits = `91${digits}`;
+  }
   if (digits.length < 10) return null;
   const text = message ? `?text=${encodeURIComponent(message)}` : "";
   return `https://wa.me/${digits}${text}`;

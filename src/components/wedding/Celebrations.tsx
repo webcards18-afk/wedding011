@@ -1,5 +1,5 @@
 import { ChevronRight, MapPin } from "lucide-react";
-import { groupEventsByDate } from "@/config/events";
+import { groupEventsByDate, type WeddingEvent } from "@/config/events";
 import { eventIcons } from "@/config/media";
 import { formatDateParts } from "@/i18n/translations";
 import { useLanguage } from "@/i18n/LanguageContext";
@@ -139,7 +139,23 @@ const defaultDateTheme: DateTheme = {
 
 export function Celebrations() {
   const { t } = useLanguage();
-  const groups = groupEventsByDate();
+  const rawGroups = groupEventsByDate();
+
+  // Merge the 13 Dec Anand Karaj event into the 12 Dec celebration night
+  // so there is no separate "13 December" date header or provisional banner
+  const groups: { date: string; events: WeddingEvent[] }[] = [];
+  for (const g of rawGroups) {
+    if (g.date === "2026-12-13") {
+      const prev = groups.find((grp) => grp.date === "2026-12-12");
+      if (prev) {
+        prev.events.push(...g.events.map((e) => ({ ...e, provisional: false })));
+      } else {
+        groups.push(g);
+      }
+    } else {
+      groups.push({ ...g, events: [...g.events] });
+    }
+  }
 
   return (
     <section id="celebrations" className="section-pad relative overflow-hidden">

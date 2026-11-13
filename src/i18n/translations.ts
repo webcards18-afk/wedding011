@@ -136,7 +136,7 @@ const en: Dictionary = {
     hours: "Hours",
     minutes: "Minutes",
     seconds: "Seconds",
-    target: "Anand Karaj · 13 December 2026 · 4:00 AM IST",
+    target: "Wedding Celebration · 13 December 2026 · 4:00 AM IST",
     done: "Forever has begun.",
   },
   scratchCard: {
@@ -209,9 +209,10 @@ const en: Dictionary = {
       venueNote: "Departure from Saidha Family Residence",
     },
     anand: {
-      name: "Anand Karaj",
-      time: "4:00 AM",
+      name: "Wedding Celebration",
+      time: "4:00",
       description: "With the blessings of Waheguru, two souls begin their journey together.",
+      venueNote: "Nearby Gurudwara",
     },
   },
   venuesSection: {
@@ -231,7 +232,7 @@ const en: Dictionary = {
       name: "Saidha Family Residence",
       address: "House No. 117, Apple Villa, Ludhiana, Punjab",
     },
-    taj: { name: "Hotel Taj", address: "Moga, Punjab" },
+    taj: { name: "Nearby Gurudwara", address: "Moga, Punjab" },
   },
   contactsSection: {
     eyebrow: "A little help from our families",
@@ -303,7 +304,7 @@ const hi: Dictionary = {
     hours: "घंटे",
     minutes: "मिनट",
     seconds: "सेकंड",
-    target: "आनंद कारज · 13 दिसंबर 2026 · प्रातः 4:00 बजे",
+    target: "विवाह समारोह · 13 दिसंबर 2026 · प्रातः 4:00 बजे",
     done: "हमेशा का साथ शुरू हो गया।",
   },
   scratchCard: {
@@ -376,9 +377,10 @@ const hi: Dictionary = {
       venueNote: "सैधा परिवार निवास से प्रस्थान",
     },
     anand: {
-      name: "आनंद कारज",
-      time: "प्रातः 4:00 बजे",
+      name: "विवाह समारोह",
+      time: "4:00",
       description: "वाहेगुरु जी के आशीर्वाद से, दो आत्माएँ अपनी साझा यात्रा आरंभ करती हैं।",
+      venueNote: "नज़दीकी गुरुद्वारा",
     },
   },
   venuesSection: {
@@ -395,7 +397,7 @@ const hi: Dictionary = {
     },
     regency: { name: "महाराजा रीजेंसी", address: "फ़िरोज़पुर रोड, लुधियाना, पंजाब" },
     residence: { name: "सैधा परिवार निवास", address: "मकान नं. 117, एप्पल विला, लुधियाना, पंजाब" },
-    taj: { name: "होटल ताज", address: "मोगा, पंजाब" },
+    taj: { name: "नज़दीकी गुरुद्वारा", address: "मोगा, पंजाब" },
   },
   contactsSection: {
     eyebrow: "हमारे परिवारों की ओर से थोड़ी मदद",
@@ -445,7 +447,7 @@ const hinglish: Dictionary = {
     hours: "Ghante",
     minutes: "Minute",
     seconds: "Second",
-    target: "Anand Karaj · 13 December 2026 · Subah 4:00 baje",
+    target: "Wedding Celebration · 13 December 2026 · Subah 4:00 baje",
     done: "Hamesha ka saath shuru ho gaya.",
   },
   scratchCard: {
@@ -518,9 +520,10 @@ const hinglish: Dictionary = {
       venueNote: "Saidha Family Residence se ravaangi",
     },
     anand: {
-      name: "Anand Karaj",
-      time: "Subah 4:00 baje",
+      name: "Wedding Celebration",
+      time: "4:00",
       description: "Waheguru ji ke aashirwaad se, do roohein apna saath ka safar shuru karti hain.",
+      venueNote: "Nearby Gurudwara",
     },
   },
   venuesSection: {

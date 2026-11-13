@@ -32,7 +32,7 @@ export const venues: Venue[] = [
   {
     id: "taj",
     image: tajMoga,
-    mapsQuery: "Hotel Taj, Bhughipura Chowk, Ludhiana Road, Moga, Punjab 142001",
+    mapsQuery: "Gurudwara, Moga, Punjab",
   },
 ];
 
