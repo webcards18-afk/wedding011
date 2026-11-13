@@ -2,10 +2,28 @@ import { wedding } from "./wedding";
 import type { VenueId } from "./venues";
 
 export type EventIcon =
-  "kirtan" | "shagun" | "haldi" | "ring" | "jaggo" | "mehndi" | "sehra" | "baraat" | "anand";
+  | "kirtan"
+  | "shagun"
+  | "haldi"
+  | "ring"
+  | "jaggo"
+  | "mehndi"
+  | "sehra"
+  | "baraat"
+  | "celebration"
+  | "anand";
 
 export type EventId =
-  "kirtan" | "shagun" | "haldi" | "ring" | "jaggo" | "mehndi" | "sehra" | "baraat" | "anand";
+  | "kirtan"
+  | "shagun"
+  | "haldi"
+  | "ring"
+  | "jaggo"
+  | "mehndi"
+  | "sehra"
+  | "baraat"
+  | "celebration"
+  | "anand";
 
 export interface WeddingEvent {
   id: EventId;
@@ -29,10 +47,11 @@ export const events: WeddingEvent[] = [
   { id: "mehndi", date: "2026-12-11", start: "12:00", venueId: "residence", icon: "mehndi" },
   { id: "sehra", date: "2026-12-12", start: "16:00", venueId: "residence", icon: "sehra" },
   { id: "baraat", date: "2026-12-12", start: "18:00", venueId: "residence", icon: "baraat" },
+  { id: "celebration", date: "2026-12-12", start: "19:00", venueId: "taj", icon: "celebration" },
   {
     id: "anand",
     date: wedding.anandKarajDate,
-    start: "04:00",
+    start: "19:30",
     venueId: "taj",
     icon: "anand",
     provisional: !wedding.anandKarajConfirmed,

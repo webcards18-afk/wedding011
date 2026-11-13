@@ -10,9 +10,9 @@ import { FamilyHelp } from "@/components/wedding/FamilyHelp";
 import { Closing } from "@/components/wedding/Closing";
 import { SiteFooter } from "@/components/wedding/SiteFooter";
 
-const title = "Abhimanyu & Aashi · The Wedding · 7–13 December 2026";
+const title = "Abhimanyu & Aashi · The Wedding · 7–12 December 2026";
 const description =
-  "With love, you are invited to the wedding of Abhimanyu & Aashi — celebrations in Ludhiana and Moga, Punjab, 7–13 December 2026. Hosted by the Saidha Family.";
+  "With love, you are invited to the wedding of Abhimanyu & Aashi — celebrations in Ludhiana and Moga, Punjab, 7–12 December 2026. Hosted by the Saidha Family.";
 
 export const Route = createFileRoute("/")({
   head: () => ({

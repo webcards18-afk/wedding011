@@ -16,7 +16,9 @@ export function Venues() {
       <div className="mx-auto mt-14 grid max-w-6xl gap-x-12 gap-y-20 md:grid-cols-2">
         {venues.map((v, i) => {
           const copy = t.venues[v.id];
-          const here = eventsAtVenue(v.id).map((e) => t.events[e.id].name);
+          const here = copy.eventLabel
+            ? [copy.eventLabel]
+            : eventsAtVenue(v.id).map((e) => t.events[e.id].name);
           return (
             <article
               key={v.id}

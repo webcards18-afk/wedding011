@@ -5,18 +5,16 @@
 export const wedding = {
   hostFamily: "Saidha",
   celebrationStart: "2026-12-07",
-  celebrationEnd: "2026-12-13",
+  celebrationEnd: "2026-12-12",
 
   /**
-   * Anand Karaj — PROVISIONAL. The family listed 12 Dec as the wedding date but the
-   * Anand Karaj is at 4:00 AM, after the 6:00 PM Baraat, so it is placed on 13 Dec.
-   * Set `anandKarajConfirmed: true` once the family confirms the date.
+   * Anand Karaj and Wedding Celebration on 12 December 2026.
    */
-  anandKarajDate: "2026-12-13",
-  anandKarajConfirmed: false,
+  anandKarajDate: "2026-12-12",
+  anandKarajConfirmed: true,
 
-  /** The live countdown counts down to this moment. */
-  countdownTarget: "2026-12-13T04:00:00+05:30",
+  /** The live countdown counts down to the wedding celebration on 12 Dec at 7:00 PM IST. */
+  countdownTarget: "2026-12-12T19:00:00+05:30",
 
   hashtags: [
     "#AbhimanyuKiAashi",

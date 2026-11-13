@@ -23,6 +23,7 @@ interface VenueCopy {
   name: string;
   sub?: string;
   address: string;
+  eventLabel?: string;
 }
 
 export interface Dictionary {
@@ -126,7 +127,7 @@ const en: Dictionary = {
   hero: {
     invited: "With love, you are invited",
     toTheWedding: "To the wedding of",
-    dates: "7 – 13 December 2026",
+    dates: "7 – 12 December 2026",
     place: "Ludhiana & Moga · Punjab",
     scroll: "Scroll",
   },
@@ -136,7 +137,7 @@ const en: Dictionary = {
     hours: "Hours",
     minutes: "Minutes",
     seconds: "Seconds",
-    target: "Wedding Celebration · 13 December 2026 · 4:00 AM IST",
+    target: "Wedding Celebration · 12 December 2026 · 7:00 PM IST",
     done: "Forever has begun.",
   },
   scratchCard: {
@@ -164,7 +165,7 @@ const en: Dictionary = {
     venue: "Venue",
     dress: "Dress theme",
     provisional: "Provisional date · to be confirmed by the family",
-    venuesLink: "Nine celebrations, four beautiful places.",
+    venuesLink: "Ten celebrations, four beautiful places.",
   },
   events: {
     kirtan: {
@@ -208,9 +209,16 @@ const en: Dictionary = {
       description: "The beginning of the grand wedding celebration.",
       venueNote: "Departure from Saidha Family Residence",
     },
-    anand: {
+    celebration: {
       name: "Wedding Celebration",
-      time: "4:00",
+      time: "7:00 PM",
+      description:
+        "An evening of grand dining, joyous melodies, and celebration with family and friends.",
+      venueNote: "Hotel Taj, Moga, Punjab",
+    },
+    anand: {
+      name: "Anand Karaj",
+      time: "4:00 PM",
       description: "With the blessings of Waheguru, two souls begin their journey together.",
       venueNote: "Nearby Gurudwara",
     },
@@ -232,7 +240,7 @@ const en: Dictionary = {
       name: "Saidha Family Residence",
       address: "House No. 117, Apple Villa, Ludhiana, Punjab",
     },
-    taj: { name: "Nearby Gurudwara", address: "Moga, Punjab" },
+    taj: { name: "Hotel Taj", address: "Moga, Punjab", eventLabel: "Wedding Celebration" },
   },
   contactsSection: {
     eyebrow: "A little help from our families",
@@ -248,7 +256,7 @@ const en: Dictionary = {
   closing: {
     eyebrow: "With love, from us",
     title: "See you at the wedding.",
-    dates: "7 – 13 December 2026 · Ludhiana & Moga",
+    dates: "7 – 12 December 2026 · Ludhiana & Moga",
     hashtags: "Share your moments",
     backToTop: "Back to top",
   },
@@ -294,7 +302,7 @@ const hi: Dictionary = {
   hero: {
     invited: "प्रेम सहित, आप सादर आमंत्रित हैं",
     toTheWedding: "शुभ विवाह",
-    dates: "7 – 13 दिसंबर 2026",
+    dates: "7 – 12 दिसंबर 2026",
     place: "लुधियाना एवं मोगा · पंजाब",
     scroll: "नीचे देखें",
   },
@@ -304,7 +312,7 @@ const hi: Dictionary = {
     hours: "घंटे",
     minutes: "मिनट",
     seconds: "सेकंड",
-    target: "विवाह समारोह · 13 दिसंबर 2026 · प्रातः 4:00 बजे",
+    target: "विवाह समारोह · 12 दिसंबर 2026 · शाम 7:00 बजे",
     done: "हमेशा का साथ शुरू हो गया।",
   },
   scratchCard: {
@@ -332,7 +340,7 @@ const hi: Dictionary = {
     venue: "स्थान",
     dress: "पोशाक थीम",
     provisional: "अस्थायी तिथि · परिवार द्वारा पुष्टि की जानी है",
-    venuesLink: "नौ समारोह, चार सुंदर स्थल।",
+    venuesLink: "दस समारोह, चार सुंदर स्थल।",
   },
   events: {
     kirtan: {
@@ -376,9 +384,15 @@ const hi: Dictionary = {
       description: "भव्य विवाह उत्सव की शुरुआत।",
       venueNote: "सैधा परिवार निवास से प्रस्थान",
     },
-    anand: {
+    celebration: {
       name: "विवाह समारोह",
-      time: "4:00",
+      time: "7:00 PM",
+      description: "भव्य प्रीतिभोज, संगीत और प्रियजनों के साथ आनंदमय उत्सव की शाम।",
+      venueNote: "होटल ताज, मोगा, पंजाब",
+    },
+    anand: {
+      name: "आनंद कारज",
+      time: "4:00 PM",
       description: "वाहेगुरु जी के आशीर्वाद से, दो आत्माएँ अपनी साझा यात्रा आरंभ करती हैं।",
       venueNote: "नज़दीकी गुरुद्वारा",
     },
@@ -397,7 +411,7 @@ const hi: Dictionary = {
     },
     regency: { name: "महाराजा रीजेंसी", address: "फ़िरोज़पुर रोड, लुधियाना, पंजाब" },
     residence: { name: "सैधा परिवार निवास", address: "मकान नं. 117, एप्पल विला, लुधियाना, पंजाब" },
-    taj: { name: "नज़दीकी गुरुद्वारा", address: "मोगा, पंजाब" },
+    taj: { name: "होटल ताज", address: "मोगा, पंजाब", eventLabel: "विवाह समारोह" },
   },
   contactsSection: {
     eyebrow: "हमारे परिवारों की ओर से थोड़ी मदद",
@@ -412,7 +426,7 @@ const hi: Dictionary = {
   closing: {
     eyebrow: "प्रेम सहित, हमारी ओर से",
     title: "विवाह में आपसे मिलेंगे।",
-    dates: "7 – 13 दिसंबर 2026 · लुधियाना एवं मोगा",
+    dates: "7 – 12 दिसंबर 2026 · लुधियाना एवं मोगा",
     hashtags: "अपने पल साझा करें",
     backToTop: "ऊपर जाएँ",
   },
@@ -437,7 +451,7 @@ const hinglish: Dictionary = {
   hero: {
     invited: "Pyaar ke saath, aap invited hain",
     toTheWedding: "Shaadi hai",
-    dates: "7 – 13 December 2026",
+    dates: "7 – 12 December 2026",
     place: "Ludhiana & Moga · Punjab",
     scroll: "Scroll karein",
   },
@@ -447,7 +461,7 @@ const hinglish: Dictionary = {
     hours: "Ghante",
     minutes: "Minute",
     seconds: "Second",
-    target: "Wedding Celebration · 13 December 2026 · Subah 4:00 baje",
+    target: "Wedding Celebration · 12 December 2026 · Shaam 7:00 baje",
     done: "Hamesha ka saath shuru ho gaya.",
   },
   scratchCard: {
@@ -475,7 +489,7 @@ const hinglish: Dictionary = {
     venue: "Venue",
     dress: "Dress theme",
     provisional: "Provisional date · parivaar confirm karega",
-    venuesLink: "Nau function, chaar khoobsurat jagah.",
+    venuesLink: "Das function, chaar khoobsurat jagah.",
   },
   events: {
     kirtan: {
@@ -519,9 +533,15 @@ const hinglish: Dictionary = {
       description: "Shaadi ke grand jashn ki shuruaat.",
       venueNote: "Saidha Family Residence se ravaangi",
     },
-    anand: {
+    celebration: {
       name: "Wedding Celebration",
-      time: "4:00",
+      time: "7:00 PM",
+      description: "Grand dinner, music aur family-friends ke saath ek khoobsurat shaam.",
+      venueNote: "Hotel Taj, Moga, Punjab",
+    },
+    anand: {
+      name: "Anand Karaj",
+      time: "4:00 PM",
       description: "Waheguru ji ke aashirwaad se, do roohein apna saath ka safar shuru karti hain.",
       venueNote: "Nearby Gurudwara",
     },
@@ -547,7 +567,7 @@ const hinglish: Dictionary = {
   closing: {
     eyebrow: "Pyaar ke saath, hamari taraf se",
     title: "Shaadi mein milte hain.",
-    dates: "7 – 13 December 2026 · Ludhiana & Moga",
+    dates: "7 – 12 December 2026 · Ludhiana & Moga",
     hashtags: "Apne pal share karein",
     backToTop: "Upar jaayein",
   },

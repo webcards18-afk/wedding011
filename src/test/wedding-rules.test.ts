@@ -6,15 +6,15 @@ import { getTimeLeft } from "@/lib/countdown";
 import { translations, formatDateParts } from "@/i18n/translations";
 
 describe("countdown", () => {
-  it("targets 13 December 2026, 4:00 AM IST (provisional Anand Karaj)", () => {
-    expect(new Date(wedding.countdownTarget).toISOString()).toBe("2026-12-12T22:30:00.000Z");
+  it("targets 12 December 2026, 7:00 PM IST (Wedding Celebration)", () => {
+    expect(new Date(wedding.countdownTarget).toISOString()).toBe("2026-12-12T13:30:00.000Z");
   });
 
   it("splits the remaining time into days, hours, minutes and seconds", () => {
     const now = new Date("2026-11-11T20:30:00+05:30").getTime();
     expect(getTimeLeft(wedding.countdownTarget, now)).toEqual({
-      days: 31,
-      hours: 7,
+      days: 30,
+      hours: 22,
       minutes: 30,
       seconds: 0,
       done: false,
@@ -22,7 +22,7 @@ describe("countdown", () => {
   });
 
   it("stops at zero once the moment has passed", () => {
-    const after = new Date("2026-12-13T05:00:00+05:30").getTime();
+    const after = new Date("2026-12-12T20:00:00+05:30").getTime();
     expect(getTimeLeft(wedding.countdownTarget, after).done).toBe(true);
   });
 });
@@ -33,24 +33,20 @@ describe("events", () => {
     expect([...times].sort((a, b) => a - b)).toEqual(times);
   });
 
-  it("Anand Karaj is provisionally on 13 Dec at 4:00 AM, after the 6:00 PM Baraat on 12 Dec", () => {
+  it("Anand Karaj is on 12 Dec, after the 6:00 PM Baraat and 7:00 PM Wedding Celebration", () => {
     const anand = events.find((e) => e.id === "anand")!;
     const baraat = events.find((e) => e.id === "baraat")!;
-    expect(anand.date).toBe("2026-12-13");
-    expect(anand.start).toBe("04:00");
-    expect(anand.provisional).toBe(true);
-    expect(baraat.date).toBe("2026-12-12");
+    expect(anand.date).toBe("2026-12-12");
     expect(eventTimestamp(anand)).toBeGreaterThan(eventTimestamp(baraat));
   });
 
-  it("group into the six celebration days", () => {
+  it("group into the celebration days", () => {
     expect(groupEventsByDate().map((g) => g.date)).toEqual([
       "2026-12-07",
       "2026-12-09",
       "2026-12-10",
       "2026-12-11",
       "2026-12-12",
-      "2026-12-13",
     ]);
   });
 

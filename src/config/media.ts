@@ -15,6 +15,7 @@ import jaggo from "@/assets/icons/jaggo.png";
 import mehndi from "@/assets/icons/mehndi.png";
 import sehra from "@/assets/icons/sehra.png";
 import baraat from "@/assets/icons/baraat.png";
+import celebration from "@/assets/icons/celebration.png";
 import anand from "@/assets/icons/anand.png";
 
 export const media = {
@@ -25,4 +26,15 @@ export const media = {
   ganesh: { src: ganesh, width: 229, height: 240 },
 };
 
-export const eventIcons = { kirtan, shagun, haldi, ring, jaggo, mehndi, sehra, baraat, anand };
+export const eventIcons = {
+  kirtan,
+  shagun,
+  haldi,
+  ring,
+  jaggo,
+  mehndi,
+  sehra,
+  baraat,
+  celebration,
+  anand,
+};
