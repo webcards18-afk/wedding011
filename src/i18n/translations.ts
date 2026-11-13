@@ -218,7 +218,7 @@ const en: Dictionary = {
     },
     anand: {
       name: "Anand Karaj",
-      time: "4:00 PM",
+      time: "4:00 AM",
       description: "With the blessings of Waheguru, two souls begin their journey together.",
       venueNote: "Nearby Gurudwara",
     },
@@ -392,7 +392,7 @@ const hi: Dictionary = {
     },
     anand: {
       name: "आनंद कारज",
-      time: "4:00 PM",
+      time: "4:00 AM",
       description: "वाहेगुरु जी के आशीर्वाद से, दो आत्माएँ अपनी साझा यात्रा आरंभ करती हैं।",
       venueNote: "नज़दीकी गुरुद्वारा",
     },
@@ -541,7 +541,7 @@ const hinglish: Dictionary = {
     },
     anand: {
       name: "Anand Karaj",
-      time: "4:00 PM",
+      time: "4:00 AM",
       description: "Waheguru ji ke aashirwaad se, do roohein apna saath ka safar shuru karti hain.",
       venueNote: "Nearby Gurudwara",
     },

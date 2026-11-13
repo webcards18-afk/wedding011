@@ -4,10 +4,7 @@ import { Reveal } from "./Reveal";
 
 export function FamilyHelp() {
   const { t } = useLanguage();
-  const sides: [string, FamilyContact[]][] = [
-    [t.contactsSection.bridesSide, contacts.bride],
-    [t.contactsSection.groomsSide, contacts.groom],
-  ];
+  const sides: [string, FamilyContact[]][] = [[t.contactsSection.groomsSide, contacts.groom]];
 
   return (
     <section id="family-help" className="px-[clamp(1.25rem,4vw,3.5rem)] pb-20 md:pb-24">
@@ -19,7 +16,7 @@ export function FamilyHelp() {
         </p>
       </Reveal>
 
-      <div className="mx-auto mt-10 grid max-w-2xl grid-cols-1 gap-6 sm:grid-cols-2">
+      <div className="mx-auto mt-10 max-w-md">
         {sides.map(([title, list], i) => (
           <Reveal key={title} delay={i * 120}>
             <div className="h-full rounded-2xl border border-gold-soft/70 bg-gradient-to-b from-white/90 via-cream-soft/70 to-amber-50/40 p-5 sm:p-6 shadow-[0_8px_30px_-12px_rgba(148,100,32,0.14)] backdrop-blur-sm text-center">
