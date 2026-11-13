@@ -28,13 +28,13 @@ export const contacts: { bride: FamilyContact[]; groom: FamilyContact[] } = {
       id: "groom-father",
       person: "deepak",
       relation: "fatherOfGroom",
-      whatsapp: "+91 96969 66133",
+      whatsapp: "+91 98766 21266",
     },
     {
       id: "groom-mother",
       person: "vaishali",
       relation: "motherOfGroom",
-      whatsapp: "+91 62803 48231",
+      whatsapp: "+91 96969 66133",
     },
   ],
 };
