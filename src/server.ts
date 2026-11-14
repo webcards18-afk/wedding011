@@ -52,39 +52,6 @@ export default {
     try {
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
-
-      // Support HTTP 206 Range requests for iOS Safari & mobile audio streaming
-      const range = request.headers.get("range");
-      const url = new URL(request.url);
-      if (
-        range &&
-        response.status === 200 &&
-        (url.pathname.endsWith(".mp3") ||
-          response.headers.get("content-type")?.includes("audio") ||
-          response.headers.get("content-type")?.includes("octet-stream"))
-      ) {
-        const buffer = await response.arrayBuffer();
-        const total = buffer.byteLength;
-        const matches = range.match(/bytes=(\d+)-(\d+)?/);
-        if (matches) {
-          const start = parseInt(matches[1], 10);
-          const end = matches[2] ? parseInt(matches[2], 10) : total - 1;
-          if (start < total) {
-            const chunk = buffer.slice(start, end + 1);
-            return new Response(chunk, {
-              status: 206,
-              headers: {
-                "content-range": `bytes ${start}-${end}/${total}`,
-                "accept-ranges": "bytes",
-                "content-length": String(chunk.byteLength),
-                "content-type": "audio/mpeg",
-                "cache-control": "public, max-age=31536000, immutable",
-              },
-            });
-          }
-        }
-      }
-
       return await normalizeCatastrophicSsrResponse(response);
     } catch (error) {
       console.error(error);
