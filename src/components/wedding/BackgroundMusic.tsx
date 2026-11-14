@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from "react";
-import { Music, VolumeX, Volume2 } from "lucide-react";
+import { Volume2, VolumeX } from "lucide-react";
 import songFile from "@/assets/song.mp3";
 
 export function BackgroundMusic() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [isMuted, setIsMuted] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [hasInteracted, setHasInteracted] = useState(false);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -14,73 +14,100 @@ export function BackgroundMusic() {
     audio.volume = 0.8;
     audio.loop = true;
 
-    // Attempt direct autoplay on load
-    const startPlay = () => {
+    // Direct automatic playback on page load
+    const attemptPlay = () => {
       audio
         .play()
         .then(() => {
           setIsPlaying(true);
-          setHasInteracted(true);
+          setIsMuted(false);
         })
         .catch(() => {
-          // Autoplay blocked by browser policy (expected on mobile without gesture)
-          setIsPlaying(false);
+          // If browser policy blocks unmuted autoplay without a prior gesture,
+          // start playing muted so it is already running and buffered,
+          // then unmute on the very first touch/scroll/pointer interaction.
+          audio.muted = true;
+          audio
+            .play()
+            .then(() => {
+              setIsPlaying(true);
+              setIsMuted(true);
+            })
+            .catch(() => {});
         });
     };
 
-    startPlay();
+    attemptPlay();
 
-    // Unlock audio on the first user interaction anywhere on the screen (Android & iOS Safari)
-    const unlock = () => {
+    // Unmute and start audio automatically on ANY user movement / touch / scroll
+    const autoStartAudio = () => {
       if (!audioRef.current) return;
-      audioRef.current
-        .play()
+      const el = audioRef.current;
+      el.muted = false;
+      el.play()
         .then(() => {
           setIsPlaying(true);
-          setHasInteracted(true);
+          setIsMuted(false);
         })
         .catch(() => {});
 
-      // Cleanup unlock listeners once triggered
-      events.forEach((evt) => {
-        window.removeEventListener(evt, unlock);
-        document.removeEventListener(evt, unlock);
+      // Remove once active
+      gestureEvents.forEach((evt) => {
+        window.removeEventListener(evt, autoStartAudio);
+        document.removeEventListener(evt, autoStartAudio);
       });
     };
 
-    const events = ["touchstart", "touchend", "pointerdown", "click", "scroll"];
-    events.forEach((evt) => {
-      window.addEventListener(evt, unlock, { once: true, passive: true });
-      document.addEventListener(evt, unlock, { once: true, passive: true });
+    const gestureEvents = [
+      "touchstart",
+      "touchend",
+      "touchmove",
+      "pointerdown",
+      "pointermove",
+      "scroll",
+      "wheel",
+      "click",
+      "keydown",
+      "pageshow",
+      "visibilitychange",
+    ];
+
+    gestureEvents.forEach((evt) => {
+      window.addEventListener(evt, autoStartAudio, { passive: true });
+      document.addEventListener(evt, autoStartAudio, { passive: true });
     });
 
     return () => {
-      events.forEach((evt) => {
-        window.removeEventListener(evt, unlock);
-        document.removeEventListener(evt, unlock);
+      gestureEvents.forEach((evt) => {
+        window.removeEventListener(evt, autoStartAudio);
+        document.removeEventListener(evt, autoStartAudio);
       });
     };
   }, []);
 
-  const toggleMusic = () => {
+  const toggleMute = () => {
     const audio = audioRef.current;
     if (!audio) return;
 
-    if (isPlaying) {
-      audio.pause();
-      setIsPlaying(false);
-    } else {
+    if (audio.paused) {
+      audio.muted = false;
       audio
         .play()
         .then(() => {
           setIsPlaying(true);
-          setHasInteracted(true);
+          setIsMuted(false);
         })
         .catch(() => {});
+    } else if (audio.muted) {
+      audio.muted = false;
+      setIsMuted(false);
+    } else {
+      audio.muted = true;
+      setIsMuted(true);
     }
   };
 
-  // Ensure repeat if audio ends
+  // Seamless replay if finished
   const handleEnded = () => {
     const audio = audioRef.current;
     if (!audio) return;
@@ -93,53 +120,32 @@ export function BackgroundMusic() {
       <audio
         ref={audioRef}
         src={songFile || "/song.mp3"}
+        autoPlay
         loop
         preload="auto"
         playsInline
         onEnded={handleEnded}
         onPlay={() => setIsPlaying(true)}
-        onPause={() => setIsPlaying(false)}
       />
 
-      {/* Floating Royal Music Control */}
+      {/* Floating Royal Sound Pill (Volume Indicator & Mute/Unmute) */}
       <aside
-        aria-label="Background music"
-        className="fixed bottom-5 right-5 z-50 flex items-center sm:bottom-6 sm:right-6 pointer-events-auto"
+        aria-label="Sound control"
+        className="fixed bottom-5 right-5 z-50 pointer-events-auto sm:bottom-6 sm:right-6"
       >
         <button
           type="button"
-          onClick={toggleMusic}
-          aria-label={isPlaying ? "Pause wedding music" : "Play wedding music"}
-          className={`group flex items-center gap-2 rounded-full border px-3.5 py-2 shadow-[0_8px_25px_-6px_rgba(148,100,32,0.3)] backdrop-blur-md transition-all duration-300 hover:scale-105 active:scale-95 ${
-            isPlaying
-              ? "border-gold-soft/80 bg-white/95 text-stone-900"
-              : "border-gold-soft/90 bg-amber-50/95 text-amber-950 animate-pulse"
-          }`}
+          onClick={toggleMute}
+          aria-label={isMuted || !isPlaying ? "Unmute background music" : "Mute background music"}
+          className="group flex h-11 w-11 items-center justify-center rounded-full border border-gold-soft/80 bg-white/95 shadow-[0_8px_25px_-6px_rgba(148,100,32,0.3)] backdrop-blur-md transition-all duration-300 hover:scale-110 active:scale-95"
         >
-          {isPlaying ? (
-            <>
-              <div className="relative flex h-5 w-5 items-center justify-center">
-                <Music className="h-4 w-4 text-amber-800 animate-spin [animation-duration:5s]" />
-              </div>
-              {/* Animated wave bars */}
-              <div className="flex h-3 items-end gap-0.5" aria-hidden="true">
-                <span className="w-0.5 bg-amber-800 rounded-full animate-pulse h-2" />
-                <span className="w-0.5 bg-amber-800 rounded-full animate-pulse h-3.5 [animation-delay:150ms]" />
-                <span className="w-0.5 bg-amber-800 rounded-full animate-pulse h-2 [animation-delay:300ms]" />
-              </div>
-              <span className="font-sans text-xs font-semibold text-stone-800 tracking-wide">
-                Music
-              </span>
-            </>
+          {isMuted || !isPlaying ? (
+            <VolumeX className="h-5 w-5 text-stone-500 transition-colors group-hover:text-stone-700" />
           ) : (
-            <>
-              <div className="flex h-5 w-5 items-center justify-center">
-                <VolumeX className="h-4 w-4 text-stone-600" />
-              </div>
-              <span className="font-sans text-xs font-semibold text-amber-950 tracking-wide">
-                Play Music 🎵
-              </span>
-            </>
+            <div className="relative flex items-center justify-center">
+              <span className="absolute -inset-1 rounded-full bg-amber-400/25 animate-ping" />
+              <Volume2 className="h-5 w-5 text-amber-800 transition-colors group-hover:text-amber-900" />
+            </div>
           )}
         </button>
       </aside>
