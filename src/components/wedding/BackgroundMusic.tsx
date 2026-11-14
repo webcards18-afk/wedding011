@@ -1,11 +1,33 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { Volume2, VolumeX } from "lucide-react";
 import songFile from "@/assets/song.mp3";
 
 export function BackgroundMusic() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const [isMuted, setIsMuted] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
+  const [showTapNotice, setShowTapNotice] = useState(false);
+
+  const startPlayback = useCallback(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    audio.muted = false;
+    const playPromise = audio.play();
+    if (playPromise !== undefined) {
+      playPromise
+        .then(() => {
+          setIsPlaying(true);
+          setIsMuted(false);
+          setShowTapNotice(false);
+        })
+        .catch(() => {
+          // If browser policy blocks unmuted autoplay on initial load without a gesture
+          setIsPlaying(false);
+          setShowTapNotice(true);
+        });
+    }
+  }, []);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -14,76 +36,58 @@ export function BackgroundMusic() {
     audio.volume = 0.8;
     audio.loop = true;
 
-    // Direct automatic playback on page load
-    const attemptPlay = () => {
-      audio
-        .play()
-        .then(() => {
-          setIsPlaying(true);
-          setIsMuted(false);
-        })
-        .catch(() => {
-          // If browser policy blocks unmuted autoplay without a prior gesture,
-          // start playing muted so it is already running and buffered,
-          // then unmute on the very first touch/scroll/pointer interaction.
-          audio.muted = true;
-          audio
-            .play()
-            .then(() => {
-              setIsPlaying(true);
-              setIsMuted(true);
-            })
-            .catch(() => {});
-        });
+    // 1. Attempt immediate autoplay on load
+    startPlayback();
+
+    // 2. Setup capture-phase user gesture unlocking for mobile (iOS Safari & Android Chrome)
+    // ONLY trusted gesture events: touchstart, touchend, pointerdown, click
+    const unlockOnGesture = () => {
+      const el = audioRef.current;
+      if (!el) return;
+
+      el.muted = false;
+      const promise = el.play();
+      if (promise !== undefined) {
+        promise
+          .then(() => {
+            setIsPlaying(true);
+            setIsMuted(false);
+            setShowTapNotice(false);
+            // Only clean up after successful playback starts
+            cleanupGestureListeners();
+          })
+          .catch(() => {
+            // Keep listeners alive if still awaiting full gesture activation
+          });
+      }
     };
 
-    attemptPlay();
+    const gestureEvents = ["touchstart", "touchend", "pointerdown", "pointerup", "click"];
 
-    // Unmute and start audio automatically on ANY user movement / touch / scroll
-    const autoStartAudio = () => {
-      if (!audioRef.current) return;
-      const el = audioRef.current;
-      el.muted = false;
-      el.play()
-        .then(() => {
-          setIsPlaying(true);
-          setIsMuted(false);
-        })
-        .catch(() => {});
-
-      // Remove once active
+    const cleanupGestureListeners = () => {
       gestureEvents.forEach((evt) => {
-        window.removeEventListener(evt, autoStartAudio);
-        document.removeEventListener(evt, autoStartAudio);
+        window.removeEventListener(evt, unlockOnGesture, true);
+        document.removeEventListener(evt, unlockOnGesture, true);
       });
     };
 
-    const gestureEvents = [
-      "touchstart",
-      "touchend",
-      "touchmove",
-      "pointerdown",
-      "pointermove",
-      "scroll",
-      "wheel",
-      "click",
-      "keydown",
-      "pageshow",
-      "visibilitychange",
-    ];
-
     gestureEvents.forEach((evt) => {
-      window.addEventListener(evt, autoStartAudio, { passive: true });
-      document.addEventListener(evt, autoStartAudio, { passive: true });
+      window.addEventListener(evt, unlockOnGesture, { capture: true, passive: true });
+      document.addEventListener(evt, unlockOnGesture, { capture: true, passive: true });
     });
 
     return () => {
-      gestureEvents.forEach((evt) => {
-        window.removeEventListener(evt, autoStartAudio);
-        document.removeEventListener(evt, autoStartAudio);
-      });
+      cleanupGestureListeners();
     };
-  }, []);
+  }, [startPlayback]);
+
+  // Seamless replay if finished
+  const handleEnded = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    audio.currentTime = 0;
+    audio.play().catch(() => {});
+  };
 
   const toggleMute = () => {
     const audio = audioRef.current;
@@ -96,6 +100,7 @@ export function BackgroundMusic() {
         .then(() => {
           setIsPlaying(true);
           setIsMuted(false);
+          setShowTapNotice(false);
         })
         .catch(() => {});
     } else if (audio.muted) {
@@ -105,14 +110,6 @@ export function BackgroundMusic() {
       audio.muted = true;
       setIsMuted(true);
     }
-  };
-
-  // Seamless replay if finished
-  const handleEnded = () => {
-    const audio = audioRef.current;
-    if (!audio) return;
-    audio.currentTime = 0;
-    audio.play().catch(() => {});
   };
 
   return (
@@ -125,14 +122,35 @@ export function BackgroundMusic() {
         preload="auto"
         playsInline
         onEnded={handleEnded}
-        onPlay={() => setIsPlaying(true)}
-      />
+        onPlay={() => {
+          setIsPlaying(true);
+          setShowTapNotice(false);
+        }}
+        onPause={() => setIsPlaying(false)}
+      >
+        <source src={songFile} type="audio/mpeg" />
+        <source src="/song.mp3" type="audio/mpeg" />
+        <source src="/assets/song.mp3" type="audio/mpeg" />
+      </audio>
 
-      {/* Floating Royal Sound Pill (Volume Indicator & Mute/Unmute) */}
+      {/* Floating Sound Toggle */}
       <aside
         aria-label="Sound control"
-        className="fixed bottom-5 right-5 z-50 pointer-events-auto sm:bottom-6 sm:right-6"
+        className="fixed bottom-5 right-5 z-50 flex items-center gap-2 pointer-events-auto sm:bottom-6 sm:right-6"
       >
+        {showTapNotice && !isPlaying && (
+          <button
+            type="button"
+            onClick={startPlayback}
+            className="animate-bounce rounded-full border border-gold-soft/90 bg-amber-50/95 px-3 py-1.5 shadow-[0_4px_20px_rgba(148,100,32,0.25)] backdrop-blur-md"
+          >
+            <p className="font-sans text-[0.72rem] font-bold text-amber-950 flex items-center gap-1.5">
+              <span>🎵</span>
+              <span>Tap to play music</span>
+            </p>
+          </button>
+        )}
+
         <button
           type="button"
           onClick={toggleMute}
