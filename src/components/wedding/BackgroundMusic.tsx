@@ -9,8 +9,9 @@ export function BackgroundMusic() {
 
     audio.volume = 1.0;
     audio.loop = true;
+    audio.muted = false;
 
-    // Helper to attempt unmuted playback
+    // Helper to attempt playback and keep it playing continuously
     const startPlayback = () => {
       const el = audioRef.current;
       if (!el) return;
@@ -38,36 +39,42 @@ export function BackgroundMusic() {
         const promise = el.play();
         if (promise !== undefined) {
           promise.catch(() => {
-            // Autoplay waiting for user gesture
+            // Autoplay waiting for gesture
           });
         }
       }
     };
 
-    // 1. Immediate trigger on component mount (works on desktop / permitted environments)
+    // 1. Immediate trigger on component mount (for desktop / allowed browsers)
     startPlayback();
 
-    // 2. High-priority user interaction listeners for Mobile (iOS Safari & Android Chrome)
-    // Any touch, tap, or interaction triggers instant playback
-    const interactionEvents = [
+    // 2. Comprehensive scroll & interaction triggers (especially for mobile scrolling)
+    // As soon as the user starts scrolling (touch, swipe, wheel, drag, or scroll event),
+    // music starts playing continuously.
+    const scrollAndInteractionEvents = [
+      "scroll",
+      "touchmove",
       "touchstart",
       "touchend",
+      "wheel",
       "pointerdown",
+      "pointermove",
       "pointerup",
       "mousedown",
       "mouseup",
       "click",
-      "scroll",
+      "keydown",
     ];
 
-    const onUserInteraction = () => {
+    const onScrollOrInteract = () => {
       startPlayback();
     };
 
-    interactionEvents.forEach((evt) => {
-      window.addEventListener(evt, onUserInteraction, { capture: true, passive: true });
-      document.addEventListener(evt, onUserInteraction, { capture: true, passive: true });
-      document.documentElement.addEventListener(evt, onUserInteraction, {
+    scrollAndInteractionEvents.forEach((evt) => {
+      window.addEventListener(evt, onScrollOrInteract, { capture: true, passive: true });
+      document.addEventListener(evt, onScrollOrInteract, { capture: true, passive: true });
+      document.body?.addEventListener(evt, onScrollOrInteract, { capture: true, passive: true });
+      document.documentElement.addEventListener(evt, onScrollOrInteract, {
         capture: true,
         passive: true,
       });
@@ -83,7 +90,15 @@ export function BackgroundMusic() {
     window.addEventListener("pageshow", startPlayback);
     window.addEventListener("focus", startPlayback);
 
-    // 4. Ensure seamless continuous looping
+    // 4. If audio pauses unexpectedly while visible, auto-resume to ensure continuous playback
+    const handlePause = () => {
+      if (!document.hidden) {
+        setTimeout(startPlayback, 100);
+      }
+    };
+    audio.addEventListener("pause", handlePause);
+
+    // 5. Ensure seamless continuous looping
     const handleEnded = () => {
       const el = audioRef.current;
       if (!el) return;
@@ -93,14 +108,16 @@ export function BackgroundMusic() {
     audio.addEventListener("ended", handleEnded);
 
     return () => {
-      interactionEvents.forEach((evt) => {
-        window.removeEventListener(evt, onUserInteraction, true);
-        document.removeEventListener(evt, onUserInteraction, true);
-        document.documentElement.removeEventListener(evt, onUserInteraction, true);
+      scrollAndInteractionEvents.forEach((evt) => {
+        window.removeEventListener(evt, onScrollOrInteract, true);
+        document.removeEventListener(evt, onScrollOrInteract, true);
+        document.body?.removeEventListener(evt, onScrollOrInteract, true);
+        document.documentElement.removeEventListener(evt, onScrollOrInteract, true);
       });
       document.removeEventListener("visibilitychange", handleVisibility);
       window.removeEventListener("pageshow", startPlayback);
       window.removeEventListener("focus", startPlayback);
+      audio.removeEventListener("pause", handlePause);
       audio.removeEventListener("ended", handleEnded);
     };
   }, []);
