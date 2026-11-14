@@ -10,7 +10,7 @@ export function BackgroundMusic() {
     audio.volume = 1.0;
     audio.loop = true;
 
-    // Helper to attempt unmuted playback
+    // Helper to start playback immediately
     const startPlayback = () => {
       const el = audioRef.current;
       if (!el) return;
@@ -47,8 +47,8 @@ export function BackgroundMusic() {
     // 1. Immediate trigger on component mount (works on desktop / permitted environments)
     startPlayback();
 
-    // 2. High-priority user interaction listeners for Mobile (iOS Safari & Android Chrome)
-    // Any touch, tap, or interaction triggers instant playback
+    // 2. High-priority non-passive user interaction listeners for Mobile (iOS Safari & Android Chrome)
+    // Mobile browsers strictly grant user-activation only to non-passive touch/pointer gestures
     const interactionEvents = [
       "touchstart",
       "touchend",
@@ -57,7 +57,6 @@ export function BackgroundMusic() {
       "mousedown",
       "mouseup",
       "click",
-      "scroll",
     ];
 
     const onUserInteraction = () => {
@@ -65,13 +64,13 @@ export function BackgroundMusic() {
     };
 
     interactionEvents.forEach((evt) => {
-      window.addEventListener(evt, onUserInteraction, { capture: true, passive: true });
-      document.addEventListener(evt, onUserInteraction, { capture: true, passive: true });
-      document.documentElement.addEventListener(evt, onUserInteraction, {
-        capture: true,
-        passive: true,
-      });
+      window.addEventListener(evt, onUserInteraction, { capture: true });
+      document.addEventListener(evt, onUserInteraction, { capture: true });
+      document.documentElement.addEventListener(evt, onUserInteraction, { capture: true });
     });
+
+    // Also listen on scroll/wheel as fallback
+    window.addEventListener("scroll", onUserInteraction, { capture: true, passive: true });
 
     // 3. Keep audio playing / resume when user returns to page/tab
     const handleVisibility = () => {
@@ -98,6 +97,7 @@ export function BackgroundMusic() {
         document.removeEventListener(evt, onUserInteraction, true);
         document.documentElement.removeEventListener(evt, onUserInteraction, true);
       });
+      window.removeEventListener("scroll", onUserInteraction, true);
       document.removeEventListener("visibilitychange", handleVisibility);
       window.removeEventListener("pageshow", startPlayback);
       window.removeEventListener("focus", startPlayback);
@@ -113,15 +113,7 @@ export function BackgroundMusic() {
       autoPlay
       loop
       playsInline
-      style={{
-        position: "fixed",
-        top: "-9999px",
-        left: "-9999px",
-        width: "1px",
-        height: "1px",
-        opacity: 0.001,
-        pointerEvents: "none",
-      }}
+      controls={false}
       aria-hidden="true"
     >
       <source src="/song.mp3" type="audio/mpeg" />
