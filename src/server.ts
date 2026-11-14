@@ -18,6 +18,79 @@ async function getServerEntry(): Promise<ServerEntry> {
   return serverEntryPromise;
 }
 
+// Support HTTP 206 Partial Content / Range requests for audio streaming
+// (strictly required by iOS Safari on iPhone to play audio files)
+async function handleAudioRangeResponse(request: Request, response: Response): Promise<Response> {
+  const url = new URL(request.url);
+  const isAudio =
+    url.pathname.endsWith(".mp3") || (response.headers.get("content-type") ?? "").includes("audio");
+
+  if (!isAudio) {
+    return response;
+  }
+
+  const rangeHeader = request.headers.get("range");
+  if (!rangeHeader) {
+    const headers = new Headers(response.headers);
+    headers.set("Accept-Ranges", "bytes");
+    headers.set("Content-Type", "audio/mpeg");
+    return new Response(response.body, {
+      status: response.status,
+      statusText: response.statusText,
+      headers,
+    });
+  }
+
+  try {
+    const arrayBuffer = await response.arrayBuffer();
+    const total = arrayBuffer.byteLength;
+    if (total === 0) return response;
+
+    const match = /bytes=(\d*)-(\d*)/.exec(rangeHeader);
+    if (!match) {
+      return new Response(null, {
+        status: 416,
+        statusText: "Range Not Satisfiable",
+        headers: {
+          "Content-Range": `bytes */${total}`,
+        },
+      });
+    }
+
+    let start = match[1] ? parseInt(match[1], 10) : 0;
+    let end = match[2] ? parseInt(match[2], 10) : total - 1;
+
+    if (isNaN(start)) start = 0;
+    if (isNaN(end) || end >= total) end = total - 1;
+    if (start > end || start >= total) {
+      return new Response(null, {
+        status: 416,
+        statusText: "Range Not Satisfiable",
+        headers: {
+          "Content-Range": `bytes */${total}`,
+        },
+      });
+    }
+
+    const chunk = arrayBuffer.slice(start, end + 1);
+    const headers = new Headers(response.headers);
+    headers.set("Content-Type", "audio/mpeg");
+    headers.set("Content-Range", `bytes ${start}-${end}/${total}`);
+    headers.set("Accept-Ranges", "bytes");
+    headers.set("Content-Length", String(chunk.byteLength));
+    headers.set("Cache-Control", "public, max-age=31536000, immutable");
+
+    return new Response(chunk, {
+      status: 206,
+      statusText: "Partial Content",
+      headers,
+    });
+  } catch (err) {
+    console.error("Failed to process audio range request:", err);
+    return response;
+  }
+}
+
 // h3 swallows in-handler throws into a normal 500 Response with body
 // {"unhandled":true,"message":"HTTPError"} — try/catch alone never fires for those.
 async function normalizeCatastrophicSsrResponse(response: Response): Promise<Response> {
@@ -52,7 +125,8 @@ export default {
     try {
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
-      return await normalizeCatastrophicSsrResponse(response);
+      const audioResponse = await handleAudioRangeResponse(request, response);
+      return await normalizeCatastrophicSsrResponse(audioResponse);
     } catch (error) {
       console.error(error);
       return new Response(renderErrorPage(), {
