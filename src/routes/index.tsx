@@ -9,6 +9,7 @@ import { Venues } from "@/components/wedding/Venues";
 import { FamilyHelp } from "@/components/wedding/FamilyHelp";
 import { Closing } from "@/components/wedding/Closing";
 import { SiteFooter } from "@/components/wedding/SiteFooter";
+import { BackgroundMusic } from "@/components/wedding/BackgroundMusic";
 
 const title = "Abhimanyu & Aashi · The Wedding · 7–12 December 2026";
 const description =
@@ -52,6 +53,7 @@ function Index() {
           <Closing />
         </main>
         <SiteFooter />
+        <BackgroundMusic />
       </div>
     </LanguageProvider>
   );

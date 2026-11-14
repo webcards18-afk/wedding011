@@ -34,7 +34,7 @@ export const contacts: { bride: FamilyContact[]; groom: FamilyContact[] } = {
       id: "groom-mother",
       person: "vaishali",
       relation: "motherOfGroom",
-      whatsapp: "+91 96969 66133",
+      whatsapp: "+91 98766 07868",
     },
   ],
 };
