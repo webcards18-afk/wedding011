@@ -4,11 +4,17 @@ import songFile from "@/assets/song.mp3";
 
 export function BackgroundMusic() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const audioCtxRef = useRef<AudioContext | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
-  const [showTapNotice, setShowTapNotice] = useState(false);
 
-  const startPlayback = useCallback(() => {
+  const attemptPlay = useCallback(() => {
+    // 1. Resume AudioContext if available (critical for mobile WebKit & iOS Safari)
+    if (audioCtxRef.current && audioCtxRef.current.state === "suspended") {
+      audioCtxRef.current.resume().catch(() => {});
+    }
+
+    // 2. Play HTML5 Audio element
     const audio = audioRef.current;
     if (!audio) return;
 
@@ -19,69 +25,81 @@ export function BackgroundMusic() {
         .then(() => {
           setIsPlaying(true);
           setIsMuted(false);
-          setShowTapNotice(false);
         })
         .catch(() => {
-          // If browser policy blocks unmuted autoplay on initial load without a gesture
-          setIsPlaying(false);
-          setShowTapNotice(true);
+          // If unmuted autoplay blocked on initial zero-touch load, start muted so playback starts
+          // immediately, and auto-unmute on first touch.
+          audio.muted = true;
+          audio
+            .play()
+            .then(() => {
+              setIsPlaying(true);
+            })
+            .catch(() => {});
         });
     }
   }, []);
 
   useEffect(() => {
+    // Initialize Web Audio API context for mobile audio unlock
+    try {
+      const AudioContextClass =
+        window.AudioContext ||
+        (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      if (AudioContextClass) {
+        audioCtxRef.current = new AudioContextClass();
+      }
+    } catch {
+      // AudioContext unavailable
+    }
+
     const audio = audioRef.current;
-    if (!audio) return;
+    if (audio) {
+      audio.volume = 0.8;
+      audio.loop = true;
+      audio.load();
+    }
 
-    audio.volume = 0.8;
-    audio.loop = true;
+    // Direct autoplay attempt on load
+    attemptPlay();
 
-    // 1. Attempt immediate autoplay on load
-    startPlayback();
+    // Capture-phase gesture listeners for mobile (iOS Safari & Android Chrome)
+    const onMobileInteraction = () => {
+      if (audioCtxRef.current && audioCtxRef.current.state === "suspended") {
+        audioCtxRef.current.resume().catch(() => {});
+      }
 
-    // 2. Setup capture-phase user gesture unlocking for mobile (iOS Safari & Android Chrome)
-    // ONLY trusted gesture events: touchstart, touchend, pointerdown, click
-    const unlockOnGesture = () => {
-      const el = audioRef.current;
-      if (!el) return;
-
-      el.muted = false;
-      const promise = el.play();
-      if (promise !== undefined) {
-        promise
+      if (audioRef.current) {
+        audioRef.current.muted = false;
+        audioRef.current
+          .play()
           .then(() => {
             setIsPlaying(true);
             setIsMuted(false);
-            setShowTapNotice(false);
-            // Only clean up after successful playback starts
-            cleanupGestureListeners();
           })
-          .catch(() => {
-            // Keep listeners alive if still awaiting full gesture activation
-          });
+          .catch(() => {});
       }
     };
 
     const gestureEvents = ["touchstart", "touchend", "pointerdown", "pointerup", "click"];
 
-    const cleanupGestureListeners = () => {
-      gestureEvents.forEach((evt) => {
-        window.removeEventListener(evt, unlockOnGesture, true);
-        document.removeEventListener(evt, unlockOnGesture, true);
-      });
-    };
-
     gestureEvents.forEach((evt) => {
-      window.addEventListener(evt, unlockOnGesture, { capture: true, passive: true });
-      document.addEventListener(evt, unlockOnGesture, { capture: true, passive: true });
+      window.addEventListener(evt, onMobileInteraction, { capture: true, passive: true });
+      document.addEventListener(evt, onMobileInteraction, { capture: true, passive: true });
     });
 
     return () => {
-      cleanupGestureListeners();
+      gestureEvents.forEach((evt) => {
+        window.removeEventListener(evt, onMobileInteraction, true);
+        document.removeEventListener(evt, onMobileInteraction, true);
+      });
+      if (audioCtxRef.current) {
+        audioCtxRef.current.close().catch(() => {});
+      }
     };
-  }, [startPlayback]);
+  }, [attemptPlay]);
 
-  // Seamless replay if finished
+  // Seamless replay if track reaches end
   const handleEnded = () => {
     const audio = audioRef.current;
     if (!audio) return;
@@ -100,7 +118,6 @@ export function BackgroundMusic() {
         .then(() => {
           setIsPlaying(true);
           setIsMuted(false);
-          setShowTapNotice(false);
         })
         .catch(() => {});
     } else if (audio.muted) {
@@ -122,39 +139,22 @@ export function BackgroundMusic() {
         preload="auto"
         playsInline
         onEnded={handleEnded}
-        onPlay={() => {
-          setIsPlaying(true);
-          setShowTapNotice(false);
-        }}
-        onPause={() => setIsPlaying(false)}
+        onPlay={() => setIsPlaying(true)}
       >
         <source src={songFile} type="audio/mpeg" />
         <source src="/song.mp3" type="audio/mpeg" />
         <source src="/assets/song.mp3" type="audio/mpeg" />
       </audio>
 
-      {/* Floating Sound Toggle */}
+      {/* Floating Sound Control (Discreet Speaker Ripple) */}
       <aside
         aria-label="Sound control"
-        className="fixed bottom-5 right-5 z-50 flex items-center gap-2 pointer-events-auto sm:bottom-6 sm:right-6"
+        className="fixed bottom-5 right-5 z-50 pointer-events-auto sm:bottom-6 sm:right-6"
       >
-        {showTapNotice && !isPlaying && (
-          <button
-            type="button"
-            onClick={startPlayback}
-            className="animate-bounce rounded-full border border-gold-soft/90 bg-amber-50/95 px-3 py-1.5 shadow-[0_4px_20px_rgba(148,100,32,0.25)] backdrop-blur-md"
-          >
-            <p className="font-sans text-[0.72rem] font-bold text-amber-950 flex items-center gap-1.5">
-              <span>🎵</span>
-              <span>Tap to play music</span>
-            </p>
-          </button>
-        )}
-
         <button
           type="button"
           onClick={toggleMute}
-          aria-label={isMuted || !isPlaying ? "Unmute background music" : "Mute background music"}
+          aria-label={isMuted || !isPlaying ? "Unmute sound" : "Mute sound"}
           className="group flex h-11 w-11 items-center justify-center rounded-full border border-gold-soft/80 bg-white/95 shadow-[0_8px_25px_-6px_rgba(148,100,32,0.3)] backdrop-blur-md transition-all duration-300 hover:scale-110 active:scale-95"
         >
           {isMuted || !isPlaying ? (
