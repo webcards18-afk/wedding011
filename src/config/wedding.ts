@@ -13,8 +13,8 @@ export const wedding = {
   anandKarajDate: "2026-12-12",
   anandKarajConfirmed: true,
 
-  /** The live countdown counts down to the wedding celebration on 12 Dec at 7:00 PM IST. */
-  countdownTarget: "2026-12-12T19:00:00+05:30",
+  /** The live countdown counts down to the wedding celebration on 12 Dec at 6:00 PM IST. */
+  countdownTarget: "2026-12-12T18:00:00+05:30",
 
   hashtags: [
     "#AbhimanyuKiAashi",

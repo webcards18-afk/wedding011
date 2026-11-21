@@ -45,17 +45,17 @@ export const events: WeddingEvent[] = [
   { id: "ring", date: "2026-12-09", start: "20:00", venueId: "regency", icon: "ring" },
   { id: "jaggo", date: "2026-12-10", start: "19:00", venueId: "residence", icon: "jaggo" },
   { id: "mehndi", date: "2026-12-11", start: "12:00", venueId: "residence", icon: "mehndi" },
-  { id: "sehra", date: "2026-12-12", start: "16:00", venueId: "residence", icon: "sehra" },
-  { id: "baraat", date: "2026-12-12", start: "18:00", venueId: "residence", icon: "baraat" },
-  { id: "celebration", date: "2026-12-12", start: "19:00", venueId: "taj", icon: "celebration" },
+  { id: "sehra", date: "2026-12-12", start: "12:00", venueId: "residence", icon: "sehra" },
+  { id: "baraat", date: "2026-12-12", start: "14:00", venueId: "residence", icon: "baraat" },
   {
     id: "anand",
     date: wedding.anandKarajDate,
-    start: "19:30",
+    start: "16:00",
     venueId: "taj",
     icon: "anand",
     provisional: !wedding.anandKarajConfirmed,
   },
+  { id: "celebration", date: "2026-12-12", start: "18:00", venueId: "taj", icon: "celebration" },
 ];
 
 export function eventTimestamp(e: WeddingEvent) {

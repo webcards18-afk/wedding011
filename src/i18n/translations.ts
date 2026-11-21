@@ -137,7 +137,7 @@ const en: Dictionary = {
     hours: "Hours",
     minutes: "Minutes",
     seconds: "Seconds",
-    target: "Wedding Celebration · 12 December 2026 · 7:00 PM IST",
+    target: "Wedding Celebration · 12 December 2026 · 6:00 PM IST",
     done: "Forever has begun.",
   },
   scratchCard: {
@@ -200,27 +200,27 @@ const en: Dictionary = {
     },
     sehra: {
       name: "Sehra Bandi",
-      time: "4:00 PM",
+      time: "12:00 PM",
       description: "The sehra is tied with love as the family showers the groom with blessings.",
     },
     baraat: {
       name: "Departure of Baraat",
-      time: "6:00 PM",
+      time: "2:00 PM",
       description: "The beginning of the grand wedding celebration.",
       venueNote: "Departure from Saidha Family Residence",
     },
+    anand: {
+      name: "Anand Karaj",
+      time: "4:00 PM",
+      description: "With the blessings of Waheguru, two souls begin their journey together.",
+      venueNote: "Nearby Gurudwara",
+    },
     celebration: {
       name: "Wedding Celebration",
-      time: "7:00 PM",
+      time: "6:00 PM onwards",
       description:
         "An evening of grand dining, joyous melodies, and celebration with family and friends.",
       venueNote: "Hotel Taj, Moga, Punjab",
-    },
-    anand: {
-      name: "Anand Karaj",
-      time: "4:00 AM",
-      description: "With the blessings of Waheguru, two souls begin their journey together.",
-      venueNote: "Nearby Gurudwara",
     },
   },
   venuesSection: {
@@ -312,7 +312,7 @@ const hi: Dictionary = {
     hours: "घंटे",
     minutes: "मिनट",
     seconds: "सेकंड",
-    target: "विवाह समारोह · 12 दिसंबर 2026 · शाम 7:00 बजे",
+    target: "विवाह समारोह · 12 दिसंबर 2026 · शाम 6:00 बजे",
     done: "हमेशा का साथ शुरू हो गया।",
   },
   scratchCard: {
@@ -375,26 +375,26 @@ const hi: Dictionary = {
     },
     sehra: {
       name: "सेहरा बंदी",
-      time: "शाम 4:00 बजे",
+      time: "दोपहर 12:00 बजे",
       description: "प्यार से सेहरा बाँधा जाता है और परिवार दूल्हे पर आशीर्वाद बरसाता है।",
     },
     baraat: {
       name: "बारात प्रस्थान",
-      time: "शाम 6:00 बजे",
+      time: "दोपहर 2:00 बजे",
       description: "भव्य विवाह उत्सव की शुरुआत।",
       venueNote: "सैधा परिवार निवास से प्रस्थान",
     },
-    celebration: {
-      name: "विवाह समारोह",
-      time: "7:00 PM",
-      description: "भव्य प्रीतिभोज, संगीत और प्रियजनों के साथ आनंदमय उत्सव की शाम।",
-      venueNote: "होटल ताज, मोगा, पंजाब",
-    },
     anand: {
       name: "आनंद कारज",
-      time: "4:00 AM",
+      time: "शाम 4:00 बजे",
       description: "वाहेगुरु जी के आशीर्वाद से, दो आत्माएँ अपनी साझा यात्रा आरंभ करती हैं।",
       venueNote: "नज़दीकी गुरुद्वारा",
+    },
+    celebration: {
+      name: "विवाह समारोह",
+      time: "शाम 6:00 बजे से",
+      description: "भव्य प्रीतिभोज, संगीत और प्रियजनों के साथ आनंदमय उत्सव की शाम।",
+      venueNote: "होटल ताज, मोगा, पंजाब",
     },
   },
   venuesSection: {
@@ -461,7 +461,7 @@ const hinglish: Dictionary = {
     hours: "Ghante",
     minutes: "Minute",
     seconds: "Second",
-    target: "Wedding Celebration · 12 December 2026 · Shaam 7:00 baje",
+    target: "Wedding Celebration · 12 December 2026 · Shaam 6:00 baje",
     done: "Hamesha ka saath shuru ho gaya.",
   },
   scratchCard: {
@@ -524,26 +524,26 @@ const hinglish: Dictionary = {
     },
     sehra: {
       name: "Sehra Bandi",
-      time: "Shaam 4:00 baje",
+      time: "Dopahar 12:00 baje",
       description: "Pyaar se sehra bandha jaata hai aur parivaar dulhe ko aashirwaad deta hai.",
     },
     baraat: {
       name: "Baraat Ki Ravaangi",
-      time: "Shaam 6:00 baje",
+      time: "Dopahar 2:00 baje",
       description: "Shaadi ke grand jashn ki shuruaat.",
       venueNote: "Saidha Family Residence se ravaangi",
     },
-    celebration: {
-      name: "Wedding Celebration",
-      time: "7:00 PM",
-      description: "Grand dinner, music aur family-friends ke saath ek khoobsurat shaam.",
-      venueNote: "Hotel Taj, Moga, Punjab",
-    },
     anand: {
       name: "Anand Karaj",
-      time: "4:00 AM",
+      time: "Shaam 4:00 baje",
       description: "Waheguru ji ke aashirwaad se, do roohein apna saath ka safar shuru karti hain.",
       venueNote: "Nearby Gurudwara",
+    },
+    celebration: {
+      name: "Wedding Celebration",
+      time: "Shaam 6:00 baje se",
+      description: "Grand dinner, music aur family-friends ke saath ek khoobsurat shaam.",
+      venueNote: "Hotel Taj, Moga, Punjab",
     },
   },
   venuesSection: {
